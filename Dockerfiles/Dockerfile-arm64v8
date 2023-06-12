@@ -1,0 +1,29 @@
+#
+# This file is managed by iRedMail Team <support@iredmail.org> with Ansible,
+# please do __NOT__ modify it manually.
+#
+
+# Run all applications in one container.
+FROM arm64v8/ubuntu:jammy
+# LABEL maintainer="iredmail team <zhb@iredmail.org>"
+EXPOSE 80 443 25 465 587 143 993 110 995 4190
+
+ARG SCRIPTS_DIR=/docker/scripts
+
+RUN mkdir -p ${SCRIPTS_DIR} 
+
+#
+# Add system accounts and install packages.
+#
+COPY ./scripts/*.sh ${SCRIPTS_DIR}/
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y resolvconf
+
+RUN /bin/sh ${SCRIPTS_DIR}/add_user_vmail.sh && \
+    /bin/sh ${SCRIPTS_DIR}/add_user_mlmmj.sh && \
+    /bin/sh ${SCRIPTS_DIR}/add_user_iredapd.sh && \
+    /bin/sh ${SCRIPTS_DIR}/add_user_iredadmin.sh && \
+    /bin/sh ${SCRIPTS_DIR}/install_all_pkgs.sh && \
+    rm -rf ${SCRIPTS_DIR}
