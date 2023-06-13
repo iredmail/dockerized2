@@ -9,7 +9,7 @@ f="$1"
 shift
 
 if [[ X"${f}" == X"" ]]; then
-    df="Dockerfiles/Dockerfile"
+    df="Dockerfiles/Dockerfile-amd64"
     label="iredmail/mariadb"
 else
     df="Dockerfiles/${f}"

@@ -48,11 +48,6 @@ install -d -o ${SYS_USER_ROOT} -g ${SYS_GROUP_ROOT} -m 0755 ${POSTFIX_CUSTOM_DIS
 touch ${POSTFIX_CUSTOM_DISCLAIMER_DIR}/default.txt
 touch ${POSTFIX_CUSTOM_DISCLAIMER_DIR}/default.html
 
-${CMD_SED} 's#^root:.*##g' /etc/postfix/aliases
-echo "${SYS_USER_ROOT}: ${POSTMASTER_EMAIL}" >> /etc/postfix/aliases
-postalias /etc/postfix/aliases
-postalias /opt/iredmail/custom/postfix/aliases
-
 install -d -o ${SYS_USER_ROOT} -g ${SYS_GROUP_POSTFIX} -m 0770 ${POSTFIX_SPOOL_DIR}/etc
 for f in localtime hosts resolv.conf; do
     if [[ -f /etc/${f} ]]; then
