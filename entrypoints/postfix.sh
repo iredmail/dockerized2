@@ -48,61 +48,10 @@ install -d -o ${SYS_USER_ROOT} -g ${SYS_GROUP_ROOT} -m 0755 ${POSTFIX_CUSTOM_DIS
 touch ${POSTFIX_CUSTOM_DISCLAIMER_DIR}/default.txt
 touch ${POSTFIX_CUSTOM_DISCLAIMER_DIR}/default.html
 
-# Make sure custom config files exist with correct owner/group and permission.
-for f in /opt/iredmail/custom/postfix/aliases \
-    /opt/iredmail/custom/postfix/helo_access.pcre \
-    /opt/iredmail/custom/postfix/rdns_access.pcre \
-    /opt/iredmail/custom/postfix/postscreen_access.cidr \
-    /opt/iredmail/custom/postfix/header_checks.pcre \
-    /opt/iredmail/custom/postfix/body_checks.pcre \
-    /opt/iredmail/custom/postfix/smtp_tls_policy \
-    /opt/iredmail/custom/postfix/transport \
-    /opt/iredmail/custom/postfix/sender_access.pcre \
-    /opt/iredmail/custom/postfix/sender_bcc \
-    /opt/iredmail/custom/postfix/recipient_bcc; do
-    touch ${f}
-    chown ${SYS_USER_ROOT}:${SYS_GROUP_POSTFIX} ${f}
-    chmod 0640 ${f}
-done
-
-# Update /etc/postfix/aliases
-for u in ${SYS_USER_AMAVISD} \
-    ${SYS_USER_CLAMAV} \
-    ${SYS_USER_DOVECOT} \
-    ${SYS_USER_IREDADMIN} \
-    ${SYS_USER_IREDAPD} \
-    ${SYS_USER_MEMCACHED} \
-    ${SYS_USER_MLMMJ} \
-    ${SYS_USER_MYSQL} \
-    ${SYS_USER_NETDATA} \
-    ${SYS_USER_NGINX} \
-    ${SYS_USER_POSTFIX} \
-    ${SYS_USER_SOGO} \
-    ${SYS_USER_SYSLOG} \
-    ${SYS_USER_BIND} \
-    openldap postgres prosody \
-    ${SYS_USER_VMAIL}; do
-    if ! grep "^${u}:" /etc/postfix/aliases &>/dev/null; then
-        echo "${u}: root" >> /etc/postfix/aliases
-    fi
-done
-
 ${CMD_SED} 's#^root:.*##g' /etc/postfix/aliases
 echo "${SYS_USER_ROOT}: ${POSTMASTER_EMAIL}" >> /etc/postfix/aliases
 postalias /etc/postfix/aliases
 postalias /opt/iredmail/custom/postfix/aliases
-
-for f in /etc/postfix/transport \
-    /etc/postfix/smtp_tls_policy \
-    /opt/iredmail/custom/postfix/transport \
-    /opt/iredmail/custom/postfix/smtp_tls_policy \
-    /opt/iredmail/custom/postfix/sender_bcc \
-    /opt/iredmail/custom/postfix/recipient_bcc; do
-    postmap hash:${f}
-
-    chown ${SYS_USER_ROOT}:${SYS_GROUP_POSTFIX} ${f}.db
-    chmod 0640 ${f}.db
-done
 
 install -d -o ${SYS_USER_ROOT} -g ${SYS_GROUP_POSTFIX} -m 0770 ${POSTFIX_SPOOL_DIR}/etc
 for f in localtime hosts resolv.conf; do
