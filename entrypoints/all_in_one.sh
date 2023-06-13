@@ -24,7 +24,7 @@ mkdir -p /root/.iredmail/kv/
 
 # Set random passwords.
 for param in ${params}; do
-    if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD)$' &>/dev/null; then
+    if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
         pw="$(${RANDOM_PASSWORD})"
 
         if grep "^${param}=" ${SETTINGS_CONF} &>/dev/null; then
@@ -43,6 +43,10 @@ for param in ${params}; do
             echo "${pw}" > /root/.iredmail/kv/sql_user_root
         elif [[ ${param} == "VMAIL_DB_ADMIN_PASSWORD" ]]; then
             echo "${pw}" > /root/.iredmail/kv/sql_user_vmailadmin
+        elif [[ ${param} == "FIRST_MAIL_DOMAIN_ADMIN_PASSWORD" ]]; then
+            echo "${pw}" > /root/.iredmail/kv/first_mail_domain_admin_password
+        elif [[ ${param} == "SOGO_SIEVE_MASTER_PASSWORD" ]]; then
+            echo "${pw}" > /root/.iredmail/kv/sogo_sieve_master_password
         elif echo ${param} | grep -E '^(MLMMJADMIN_API_TOKEN|IREDAPD_SRS_SECRET|ROUNDCUBE_DES_KEY)$' &>/dev/null; then
             name="$(echo ${param} | tr [A-Z] [a-z])"
             echo "${pw}" > /root/.iredmail/kv/${name}
