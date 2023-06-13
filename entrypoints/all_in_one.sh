@@ -36,6 +36,25 @@ for param in ${params}; do
     fi
 done
 
+# If parameter is defined as environment variables, replace it in config file.
+for param in ${params}; do
+    _env_line="$(grep "^${param}=" ${tmp_env_file})"
+    _env_value="${_env_line#*=}"
+
+    if [ X"${_env_value}" != X'' ]; then
+        # Replace in place instead of appending it.
+        ${CMD_SED} "s#^${param}=.*#${param}=${_env_value}#g" ${SETTINGS_CONF}
+    fi
+done
+rm -f ${tmp_env_file}
+
+# It now contains both default and custom settings.
+. ${SETTINGS_CONF}
+
+# Make sure config file is not world-readable.
+chown root ${SETTINGS_CONF}
+chmod 0400 ${SETTINGS_CONF}
+
 # Write to /root/.iredmail/kv/
 for param in ${params}; do
     if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
@@ -61,25 +80,6 @@ for param in ${params}; do
         fi
     fi
 done
-
-# If parameter is defined as environment variables, replace it in config file.
-for param in ${params}; do
-    _env_line="$(grep "^${param}=" ${tmp_env_file})"
-    _env_value="${_env_line#*=}"
-
-    if [ X"${_env_value}" != X'' ]; then
-        # Replace in place instead of appending it.
-        ${CMD_SED} "s#^${param}=.*#${param}=${_env_value}#g" ${SETTINGS_CONF}
-    fi
-done
-rm -f ${tmp_env_file}
-
-# It now contains both default and custom settings.
-. ${SETTINGS_CONF}
-
-# Make sure config file is not world-readable.
-chown root ${SETTINGS_CONF}
-chmod 0400 ${SETTINGS_CONF}
 
 # Check required variables.
 require_non_empty_var HOSTNAME ${HOSTNAME}
