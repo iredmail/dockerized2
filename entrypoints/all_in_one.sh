@@ -103,8 +103,6 @@ run_entrypoint ${ENTRYPOINTS_DIR}/cron.sh
 run_entrypoint ${ENTRYPOINTS_DIR}/mariadb.sh
 run_entrypoint ${ENTRYPOINTS_DIR}/dovecot.sh
 run_entrypoint ${ENTRYPOINTS_DIR}/postfix.sh
-run_entrypoint ${ENTRYPOINTS_DIR}/mlmmj.sh
-run_entrypoint ${ENTRYPOINTS_DIR}/mlmmjadmin.sh
 
 # Update all placeholders in /root/iRedMail/iRedMail.tips.
 . ${ENTRYPOINTS_DIR}/tip_file.sh
@@ -148,6 +146,9 @@ fi
 for srv in ${SUP_SERVICES}; do
     ln -sf /etc/supervisor/conf-available/${srv}.conf /etc/supervisor/conf.d/${srv}.conf
 done
+
+# Generate all config files with custom settings.
+/gosible/gosible -e /gosible/settings.zhb.json -p docker.yml
 
 # Run specified commands in Dockerfile `CMD`.
 LOG "CMD: $@"

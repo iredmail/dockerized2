@@ -23,10 +23,7 @@ RUN mkdir -p \
 #
 COPY ./scripts/*.sh ${SCRIPTS_DIR}/
 
-RUN /bin/sh ${SCRIPTS_DIR}/add_user_vmail.sh && \
-    /bin/sh ${SCRIPTS_DIR}/add_user_mlmmj.sh && \
-    /bin/sh ${SCRIPTS_DIR}/add_user_iredapd.sh && \
-    /bin/sh ${SCRIPTS_DIR}/add_user_iredadmin.sh && \
+RUN /bin/sh ${SCRIPTS_DIR}/add_system_accounts.sh && \
     /bin/sh ${SCRIPTS_DIR}/install_all_pkgs.sh && \
     rm -rf ${SCRIPTS_DIR}
 
