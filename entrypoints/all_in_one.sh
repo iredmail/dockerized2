@@ -56,6 +56,8 @@ chown root ${SETTINGS_CONF}
 chmod 0400 ${SETTINGS_CONF}
 
 # Write to /root/.iredmail/kv/
+set -x
+params="$(grep '^[0-9a-zA-Z]' ${SETTINGS_CONF} | awk -F'=' '{print $1}')"
 for param in ${params}; do
     if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
         line="$(grep '^${param}=' ${SETTINGS_CONF})"
@@ -65,13 +67,13 @@ for param in ${params}; do
             u="$(echo ${param%_DB_PASSWORD} | tr [A-Z] [a-z])"
             echo "${v}" > /root/.iredmail/kv/sql_user_${u}
             unset u
-        elif [[ ${param} == "MYSQL_ROOT_PASSWORD" ]]; then
+        elif [[ X"${param}" == X'MYSQL_ROOT_PASSWORD' ]]; then
             echo "${v}" > /root/.iredmail/kv/sql_user_root
-        elif [[ ${param} == "VMAIL_DB_ADMIN_PASSWORD" ]]; then
+        elif [[ X"${param}" == X'VMAIL_DB_ADMIN_PASSWORD' ]]; then
             echo "${v}" > /root/.iredmail/kv/sql_user_vmailadmin
-        elif [[ ${param} == "FIRST_MAIL_DOMAIN_ADMIN_PASSWORD" ]]; then
+        elif [[ X"${param}" == X'FIRST_MAIL_DOMAIN_ADMIN_PASSWORD' ]]; then
             echo "${v}" > /root/.iredmail/kv/first_mail_domain_admin_password
-        elif [[ ${param} == "SOGO_SIEVE_MASTER_PASSWORD" ]]; then
+        elif [[ X"${param}" == "SOGO_SIEVE_MASTER_PASSWORD" ]]; then
             echo "${v}" > /root/.iredmail/kv/sogo_sieve_master_password
         elif echo ${param} | grep -E '^(MLMMJADMIN_API_TOKEN|IREDAPD_SRS_SECRET|ROUNDCUBE_DES_KEY)$' &>/dev/null; then
             name="$(echo ${param} | tr [A-Z] [a-z])"
@@ -80,6 +82,7 @@ for param in ${params}; do
         fi
     fi
 done
+set +x
 
 # Check required variables.
 require_non_empty_var HOSTNAME ${HOSTNAME}
