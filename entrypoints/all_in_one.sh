@@ -37,15 +37,15 @@ for param in ${params}; do
         # Write to /root/.iredmail/kv/
         if echo ${param} | grep -E '_DB_PASSWORD$' &>/dev/null; then
             u="$(echo ${param%_DB_PASSWORD} | tr [A-Z] [a-z])"
-            echo "${pw}" > /root/.iredmail/sql_user_${u}
+            echo "${pw}" > /root/.iredmail/kv/sql_user_${u}
             unset u
         elif [[ ${param} == "MYSQL_ROOT_PASSWORD" ]]; then
-            echo "${pw}" > /root/.iredmail/sql_user_root
+            echo "${pw}" > /root/.iredmail/kv/sql_user_root
         elif [[ ${param} == "VMAIL_DB_ADMIN_PASSWORD" ]]; then
-            echo "${pw}" > /root/.iredmail/sql_user_vmailadmin
+            echo "${pw}" > /root/.iredmail/kv/sql_user_vmailadmin
         elif echo ${param} | grep -E '^(MLMMJADMIN_API_TOKEN|IREDAPD_SRS_SECRET|ROUNDCUBE_DES_KEY)$' &>/dev/null; then
             name="$(echo ${param} | tr [A-Z] [a-z])"
-            echo "${pw}" > /root/.iredmail/${name}
+            echo "${pw}" > /root/.iredmail/kv/${name}
             unset name
         fi
     fi
