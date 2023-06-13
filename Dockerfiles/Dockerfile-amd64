@@ -13,6 +13,7 @@ ARG SCRIPTS_DIR=/docker/scripts
 ARG MARIADB_PRE_START_SCRIPTS_DIR=/docker/mariadb/pre_start
 
 RUN mkdir -p \
+        /gosible \
         ${ENTRYPOINTS_DIR} \
         ${SCRIPTS_DIR} \
         ${MARIADB_PRE_START_SCRIPTS_DIR}
@@ -45,6 +46,7 @@ COPY ./settings.conf ${ENTRYPOINTS_DIR}/
 
 # Main entrypoint script.
 COPY ./entrypoints/all_in_one.sh /entrypoint.sh
+COPY ./gosible/* /gosible/
 
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

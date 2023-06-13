@@ -56,7 +56,6 @@ chown root ${SETTINGS_CONF}
 chmod 0400 ${SETTINGS_CONF}
 
 # Write to /root/.iredmail/kv/
-set -x
 params="$(grep '^[0-9a-zA-Z]' ${SETTINGS_CONF} | awk -F'=' '{print $1}')"
 for param in ${params}; do
     if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
@@ -83,7 +82,6 @@ for param in ${params}; do
         fi
     fi
 done
-set +x
 
 # Check required variables.
 require_non_empty_var HOSTNAME ${HOSTNAME}

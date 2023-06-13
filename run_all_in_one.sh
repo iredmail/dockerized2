@@ -9,7 +9,7 @@
 
 PWD="$(pwd)"
 CONF="${PWD}/iredmail-docker.conf"
-DATA_DIR="${PWD}/data"
+DATA_DIR="${PWD}/_data"
 
 if [[ ! -e ${CONF} ]]; then
     echo "ERROR: Config file ${CONF} doesn't exist."
@@ -36,16 +36,16 @@ DATA_SUB_DIRS='
 for i in ${DATA_SUB_DIRS}; do
     _dir="${DATA_DIR}/${i}"
     if [ ! -d ${_dir} ]; then
-        echo "+ Create local volume directory: ${_dir}"
+        echo "+ Create directory for bind mount: ${_dir}"
         mkdir -p ${_dir}
     fi
 done
 
 docker run \
     --rm \
+    --name iredmail \
     --env-file ${CONF} \
     --hostname ${HOSTNAME} \
-    -p 80:80 \
     -p 443:443 \
     -p 110:110 \
     -p 995:995 \
