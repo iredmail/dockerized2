@@ -19,14 +19,34 @@ env > ${tmp_env_file}
 
 params="$(grep '^[0-9a-zA-Z]' ${SETTINGS_CONF} | awk -F'=' '{print $1}')"
 
+# For gosible.
+mkdir -p /root/.iredmail/kv/
+
 # Set random passwords.
 for param in ${params}; do
     if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD)$' &>/dev/null; then
+        pw="$(${RANDOM_PASSWORD})"
+
         if grep "^${param}=" ${SETTINGS_CONF} &>/dev/null; then
             # Replace existing variable to avoid duplicate lines.
-            ${CMD_SED} "s#^\(${param}=\).*#\1$(${RANDOM_PASSWORD})#g" ${SETTINGS_CONF}
+            ${CMD_SED} "s#^\(${param}=\).*#\1${pw}#g" ${SETTINGS_CONF}
         else
-            echo "${param}=$(${RANDOM_PASSWORD})" >> ${SETTINGS_CONF}
+            echo "${param}=${pw}" >> ${SETTINGS_CONF}
+        fi
+
+        # Write to /root/.iredmail/kv/
+        if echo ${param} | grep -E '_DB_PASSWORD$' &>/dev/null; then
+            u="$(echo ${param%_DB_PASSWORD} | tr [A-Z] [a-z])"
+            echo "${pw}" > /root/.iredmail/sql_user_${u}
+            unset u
+        elif [[ ${param} == "MYSQL_ROOT_PASSWORD" ]]; then
+            echo "${pw}" > /root/.iredmail/sql_user_root
+        elif [[ ${param} == "VMAIL_DB_ADMIN_PASSWORD" ]]; then
+            echo "${pw}" > /root/.iredmail/sql_user_vmailadmin
+        elif echo ${param} | grep -E '^(MLMMJADMIN_API_TOKEN|IREDAPD_SRS_SECRET|ROUNDCUBE_DES_KEY)$' &>/dev/null; then
+            name="$(echo ${param} | tr [A-Z] [a-z])"
+            echo "${pw}" > /root/.iredmail/${name}
+            unset name
         fi
     fi
 done
