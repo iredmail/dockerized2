@@ -101,8 +101,6 @@ echo "${HOSTNAME}" > /etc/mailname
 run_entrypoint ${ENTRYPOINTS_DIR}/rsyslog.sh
 run_entrypoint ${ENTRYPOINTS_DIR}/cron.sh
 run_entrypoint ${ENTRYPOINTS_DIR}/mariadb.sh
-run_entrypoint ${ENTRYPOINTS_DIR}/dovecot.sh
-run_entrypoint ${ENTRYPOINTS_DIR}/postfix.sh
 
 # Update all placeholders in /root/iRedMail/iRedMail.tips.
 . ${ENTRYPOINTS_DIR}/tip_file.sh
@@ -112,7 +110,6 @@ run_entrypoint ${ENTRYPOINTS_DIR}/postfix.sh
 SUP_SERVICES="cron rsyslog mariadb dovecot postfix mlmmjadmin"
 
 if [[ X"${USE_IREDAPD}" == X'YES' ]]; then
-    run_entrypoint ${ENTRYPOINTS_DIR}/iredapd.sh
     SUP_SERVICES="${SUP_SERVICES} iredapd"
 fi
 
@@ -122,24 +119,15 @@ if [[ X"${USE_ANTISPAM}" == X'YES' ]]; then
     SUP_SERVICES="${SUP_SERVICES} clamav amavisd"
 fi
 
-# Nginx & php-fpm
 if [[ X"${USE_ROUNDCUBE}" == X'YES' ]]; then
-    run_entrypoint ${ENTRYPOINTS_DIR}/nginx.sh
-    run_entrypoint ${ENTRYPOINTS_DIR}/phpfpm.sh
-fi
-
-if [[ X"${USE_ROUNDCUBE}" == X'YES' ]]; then
-    run_entrypoint ${ENTRYPOINTS_DIR}/roundcube.sh
     SUP_SERVICES="${SUP_SERVICES} nginx phpfpm"
 fi
 
 if [[ X"${USE_FAIL2BAN}" == X'YES' ]]; then
-    run_entrypoint ${ENTRYPOINTS_DIR}/fail2ban.sh
     SUP_SERVICES="${SUP_SERVICES} fail2ban"
 fi
 
 if [[ X"${USE_IREDADMIN}" == X'YES' ]]; then
-    run_entrypoint ${ENTRYPOINTS_DIR}/iredadmin.sh
     SUP_SERVICES="${SUP_SERVICES} iredadmin"
 fi
 
@@ -147,8 +135,8 @@ for srv in ${SUP_SERVICES}; do
     ln -sf /etc/supervisor/conf-available/${srv}.conf /etc/supervisor/conf.d/${srv}.conf
 done
 
-# Generate all config files with custom settings.
-/gosible/gosible -e /gosible/settings.zhb.json -p docker.yml
+install -d -o ${SYS_USER_SYSLOG} -g ${SYS_GROUP_SYSLOG} -m 0755 /var/log/php-fpm
+install -d -o ${SYS_USER_NGINX} -g ${SYS_GROUP_NGINX} -m 0755 /run/php
 
 # Run specified commands in Dockerfile `CMD`.
 LOG "CMD: $@"

@@ -191,6 +191,9 @@ create_dot_my_cnf
 
 [[ "${_run_pre_start}" == "YES" ]] && run_scripts_in_dir ${PRE_START_SCRIPTS_DIR}
 
+# Generate all config files with custom settings.
+/gosible/gosible -e /gosible/settings.zhb.json -p docker.yml
+
 stop_temp_mysql_instance
 
 # mysqld_safe --user=${SYS_USER_MYSQL} --datadir="${DATA_DIR} $@
