@@ -33,23 +33,30 @@ for param in ${params}; do
         else
             echo "${param}=${pw}" >> ${SETTINGS_CONF}
         fi
+    fi
+done
 
-        # Write to /root/.iredmail/kv/
+# Write to /root/.iredmail/kv/
+for param in ${params}; do
+    if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
+        line="$(grep '^${param}=' ${SETTINGS_CONF})"
+        v="$(echo ${line#*=})"
+
         if echo ${param} | grep -E '_DB_PASSWORD$' &>/dev/null; then
             u="$(echo ${param%_DB_PASSWORD} | tr [A-Z] [a-z])"
-            echo "${pw}" > /root/.iredmail/kv/sql_user_${u}
+            echo "${v}" > /root/.iredmail/kv/sql_user_${u}
             unset u
         elif [[ ${param} == "MYSQL_ROOT_PASSWORD" ]]; then
-            echo "${pw}" > /root/.iredmail/kv/sql_user_root
+            echo "${v}" > /root/.iredmail/kv/sql_user_root
         elif [[ ${param} == "VMAIL_DB_ADMIN_PASSWORD" ]]; then
-            echo "${pw}" > /root/.iredmail/kv/sql_user_vmailadmin
+            echo "${v}" > /root/.iredmail/kv/sql_user_vmailadmin
         elif [[ ${param} == "FIRST_MAIL_DOMAIN_ADMIN_PASSWORD" ]]; then
-            echo "${pw}" > /root/.iredmail/kv/first_mail_domain_admin_password
+            echo "${v}" > /root/.iredmail/kv/first_mail_domain_admin_password
         elif [[ ${param} == "SOGO_SIEVE_MASTER_PASSWORD" ]]; then
-            echo "${pw}" > /root/.iredmail/kv/sogo_sieve_master_password
+            echo "${v}" > /root/.iredmail/kv/sogo_sieve_master_password
         elif echo ${param} | grep -E '^(MLMMJADMIN_API_TOKEN|IREDAPD_SRS_SECRET|ROUNDCUBE_DES_KEY)$' &>/dev/null; then
             name="$(echo ${param} | tr [A-Z] [a-z])"
-            echo "${pw}" > /root/.iredmail/kv/${name}
+            echo "${v}" > /root/.iredmail/kv/${name}
             unset name
         fi
     fi
