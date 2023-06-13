@@ -60,7 +60,7 @@ set -x
 params="$(grep '^[0-9a-zA-Z]' ${SETTINGS_CONF} | awk -F'=' '{print $1}')"
 for param in ${params}; do
     if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
-        line="$(grep '^${param}=' ${SETTINGS_CONF})"
+        line=$(grep -E "^${param}=" ${SETTINGS_CONF})
         v="$(echo ${line#*=})"
 
         if echo ${param} | grep -E '_DB_PASSWORD$' &>/dev/null; then
