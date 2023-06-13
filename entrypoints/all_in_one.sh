@@ -72,7 +72,8 @@ for param in ${params}; do
         elif [[ X"${param}" == X'VMAIL_DB_ADMIN_PASSWORD' ]]; then
             echo "${v}" > /root/.iredmail/kv/sql_user_vmailadmin
         elif [[ X"${param}" == X'FIRST_MAIL_DOMAIN_ADMIN_PASSWORD' ]]; then
-            echo "${v}" > /root/.iredmail/kv/first_mail_domain_admin_password
+            # WARNING: DIFFERENT NAME.
+            echo "${v}" > /root/.iredmail/kv/first_domain_admin_password
         elif [[ X"${param}" == "SOGO_SIEVE_MASTER_PASSWORD" ]]; then
             echo "${v}" > /root/.iredmail/kv/sogo_sieve_master_password
         elif echo ${param} | grep -E '^(MLMMJADMIN_API_TOKEN|IREDAPD_SRS_SECRET|ROUNDCUBE_DES_KEY)$' &>/dev/null; then
