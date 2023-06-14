@@ -19,6 +19,7 @@ PKGS_MLMMJ="mlmmj altermime"
 PKGS_MLMMJADMIN="uwsgi uwsgi-plugin-python3 python3-requests python3-pymysql python3-psycopg2 python3-ldap python3-more-itertools"
 PKGS_FAIL2BAN="fail2ban bind9-dnsutils iptables"
 PKGS_ROUNDCUBE="php-bz2 php-curl php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip mcrypt mariadb-client aspell"
+PKGS_BIND="bind9 bind9utils dnsutils"
 PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
     ${PKGS_BASE}
     ${PKGS_MYSQL}
@@ -34,7 +35,8 @@ PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
     ${PKGS_MLMMJ}
     ${PKGS_MLMMJADMIN}
     ${PKGS_FAIL2BAN}
-    ${PKGS_ROUNDCUBE}"
+    ${PKGS_ROUNDCUBE}
+    ${PKGS_BIND}"
 
 # Required directories.
 export WEB_APP_ROOTDIR="/opt/www"

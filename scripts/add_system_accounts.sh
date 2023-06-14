@@ -27,3 +27,17 @@ useradd \
     --gid iredadmin \
     --shell /sbin/nologin \
     iredadmin
+
+groupadd --gid 2001 bind
+useradd \
+    --uid 2001 \
+    --gid bind \
+    --shell /sbin/nologin \
+    bind
+
+groupadd --gid 2004 netdata
+useradd \
+    --uid 2004 \
+    --gid netdata \
+    --shell /sbin/nologin \
+    netdata    
