@@ -3,6 +3,8 @@
 # Remove leftover pid files which may cause service fail to start.
 find /run -name "*.pid" | xargs rm -f {}
 
+. /docker/entrypoints/functions.sh
+
 run_entrypoint ${ENTRYPOINTS_DIR}/mariadb.sh
 #run_entrypoint ${ENTRYPOINTS_DIR}/rsyslog.sh
 #run_entrypoint ${ENTRYPOINTS_DIR}/cron.sh
