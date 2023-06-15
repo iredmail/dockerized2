@@ -58,7 +58,7 @@ chmod 0400 ${SETTINGS_CONF}
 # Write to /root/.iredmail/kv/
 params="$(grep '^[0-9a-zA-Z]' ${SETTINGS_CONF} | awk -F'=' '{print $1}')"
 for param in ${params}; do
-    if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
+    if echo ${param} | grep -E '(_DB_PASSWORD|^MLMMJADMIN_API_TOKEN|^IREDAPD_SRS_SECRET|^ROUNDCUBE_DES_KEY|^MYSQL_ROOT_PASSWORD|^VMAIL_DB_ADMIN_PASSWORD|^SOGO_SIEVE_MASTER_PASSWORD|^FIRST_MAIL_DOMAIN_ADMIN_PASSWORD|^FIRST_DOMAIN_ADMIN_PASSWORD)$' &>/dev/null; then
         line=$(grep -E "^${param}=" ${SETTINGS_CONF})
         v="$(echo ${line#*=})"
 
@@ -72,6 +72,8 @@ for param in ${params}; do
             echo "${v}" > /root/.iredmail/kv/sql_user_vmailadmin
         elif [[ X"${param}" == X'FIRST_MAIL_DOMAIN_ADMIN_PASSWORD' ]]; then
             # WARNING: DIFFERENT NAME.
+            echo "${v}" > /root/.iredmail/kv/first_domain_admin_password
+        elif [[ X"${param}" == X'FIRST_DOMAIN_ADMIN_PASSWORD' ]]; then
             echo "${v}" > /root/.iredmail/kv/first_domain_admin_password
         elif [[ X"${param}" == "SOGO_SIEVE_MASTER_PASSWORD" ]]; then
             echo "${v}" > /root/.iredmail/kv/sogo_sieve_master_password
@@ -136,7 +138,8 @@ for srv in ${SUP_SERVICES}; do
 done
 
 install -d -o ${SYS_USER_SYSLOG} -g ${SYS_GROUP_SYSLOG} -m 0755 /var/log/php-fpm
-install -d -o ${SYS_USER_NGINX} -g ${SYS_GROUP_NGINX} -m 0755 /run/php
+install -d -o ${SYS_USER_NGINX}  -g ${SYS_GROUP_NGINX}  -m 0755 /run/php
+install -d -o ${SYS_USER_CLAMAV} -g ${SYS_GROUP_CLAMAV} -m 0755 /run/clamav/
 
 # Run specified commands in Dockerfile `CMD`.
 LOG "CMD: $@"
