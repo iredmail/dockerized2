@@ -18,17 +18,17 @@ SOCKET_PATH="/run/mysqld/mysqld.sock"
 DOT_MY_CNF="/root/.my.cnf"
 
 # Directories used to store pre-start and initialization shell/sql scripts.
-PRE_START_SCRIPTS_DIR="/docker/mariadb/pre_start"
+#PRE_START_SCRIPTS_DIR="/docker/mariadb/pre_start"
 
-require_non_empty_var MYSQL_ROOT_PASSWORD ${MYSQL_ROOT_PASSWORD}
-require_non_empty_var VMAIL_DB_PASSWORD ${VMAIL_DB_PASSWORD}
-require_non_empty_var VMAIL_DB_ADMIN_PASSWORD ${VMAIL_DB_ADMIN_PASSWORD}
+#require_non_empty_var MYSQL_ROOT_PASSWORD ${MYSQL_ROOT_PASSWORD}
+#require_non_empty_var VMAIL_DB_PASSWORD ${VMAIL_DB_PASSWORD}
+#require_non_empty_var VMAIL_DB_ADMIN_PASSWORD ${VMAIL_DB_ADMIN_PASSWORD}
 
 # Add required directories.
-if [[ ! -d ${CUSTOM_CONF_DIR} ]]; then
-    LOG "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
-    mkdir -p ${CUSTOM_CONF_DIR}
-fi
+#if [[ ! -d ${CUSTOM_CONF_DIR} ]]; then
+#    LOG "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
+#    mkdir -p ${CUSTOM_CONF_DIR}
+#fi
 
 # Create data directory if not present
 [[ -d ${DATA_DIR} ]] || mkdir -p ${DATA_DIR}
@@ -40,9 +40,9 @@ if [[ ! -d "${DATA_DIR}/mysql" ]]; then
     _first_run="YES"
 fi
 
-if [[ -d "${PRE_START_SCRIPTS_DIR}" ]] && [[ "$(ls -A ${PRE_START_SCRIPTS_DIR})" ]]; then
-    _run_pre_start="YES"
-fi
+#if [[ -d "${PRE_START_SCRIPTS_DIR}" ]] && [[ "$(ls -A ${PRE_START_SCRIPTS_DIR})" ]]; then
+#    _run_pre_start="YES"
+#fi
 
 cmd_mysql_opts="--protocol=socket -uroot -hlocalhost --socket=${SOCKET_PATH}"
 cmd_mysql="mysql ${cmd_mysql_opts}"
@@ -189,11 +189,9 @@ start_temp_mysql_instance
 # ~/.my.cnf is required by pre_start scripts.
 create_dot_my_cnf
 
-[[ "${_run_pre_start}" == "YES" ]] && run_scripts_in_dir ${PRE_START_SCRIPTS_DIR}
+#[[ "${_run_pre_start}" == "YES" ]] && run_scripts_in_dir ${PRE_START_SCRIPTS_DIR}
 
 # Generate all config files with custom settings.
 /gosible/gosible -e /root/.iredmail/settings.json -p docker.yml
 
 stop_temp_mysql_instance
-
-# mysqld_safe --user=${SYS_USER_MYSQL} --datadir="${DATA_DIR} $@
