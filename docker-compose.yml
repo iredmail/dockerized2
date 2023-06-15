@@ -1,0 +1,32 @@
+version: "3"
+services:
+  iredmail:
+    image: iredmail/mariadb:nightly
+    container_name: iredmail
+    environment:
+      - HOSTNAME=mail.example.com
+      - FIRST_MAIL_DOMAIN=example.com
+    volumes:
+      - ./data/iredmail:/root/.iredmail
+      - ./data/backup-mysql:/var/vmail/backup/mysql
+      - ./data/mailboxes:/var/vmail/vmail1
+      - ./data/mlmmj:/var/vmail/mlmmj
+      - ./data/mlmmj-archive:/var/vmail/mlmmj-archive
+      - ./data/imapsieve_copy:/var/vmail/imapsieve_copy
+      - ./data/custom:/opt/iredmail/custom
+      - ./data/ssl:/opt/iredmail/ssl
+      - ./data/mysql:/var/lib/mysql
+      - ./data/clamav:/var/lib/clamav
+      - ./data/sa_rules:/var/lib/spamassassin
+      - ./data/postfix_queue:/var/spool/postfix
+    ports:
+      - 80:80
+      - 443:443
+      - 110:110
+      - 995:995
+      - 143:143
+      - 993:993
+      - 25:25
+      - 465:465
+      - 587:587
+    restart: unless-stopped
