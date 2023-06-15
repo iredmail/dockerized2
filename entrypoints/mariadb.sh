@@ -17,6 +17,7 @@ CUSTOM_CONF_DIR="/opt/iredmail/custom/mysql"
 SOCKET_PATH="/run/mysqld/mysqld.sock"
 DOT_MY_CNF="/root/.my.cnf"
 
+
 # Directories used to store pre-start and initialization shell/sql scripts.
 #PRE_START_SCRIPTS_DIR="/docker/mariadb/pre_start"
 
@@ -25,10 +26,10 @@ DOT_MY_CNF="/root/.my.cnf"
 #require_non_empty_var VMAIL_DB_ADMIN_PASSWORD ${VMAIL_DB_ADMIN_PASSWORD}
 
 # Add required directories.
-#if [[ ! -d ${CUSTOM_CONF_DIR} ]]; then
-#    LOG "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
-#    mkdir -p ${CUSTOM_CONF_DIR}
-#fi
+if [[ ! -d ${CUSTOM_CONF_DIR} ]]; then
+    LOG "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
+    mkdir -p ${CUSTOM_CONF_DIR}
+fi
 
 # Create data directory if not present
 [[ -d ${DATA_DIR} ]] || mkdir -p ${DATA_DIR}
