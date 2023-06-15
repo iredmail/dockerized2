@@ -29,7 +29,7 @@ Create required directories to store application data:
 
 ```
 cd /iredmail
-mkdir -p data/{backup-mysql,clamav,custom,imapsieve_copy,mailboxes,mlmmj,mlmmj-archive,mysql,sa_rules,ssl,postfix_queue}
+mkdir -p data/{dot-iredmail,backup-mysql,clamav,custom,imapsieve_copy,mailboxes,mlmmj,mlmmj-archive,mysql,sa_rules,ssl,postfix_queue}
 ```
 
 Launch the container:

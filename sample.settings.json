@@ -1,6 +1,7 @@
 {
     "iredmail_backend": "mariadb",
     "bind_upstream_servers": ["8.8.8.8", "9.9.9.9"],
+    "first_mail_domain": "example.com",
     "inventory_hostname": "mail.example.com",
     "//use_nfs_storage": true,
     "nfs_export_dir": "/var/vmail",
