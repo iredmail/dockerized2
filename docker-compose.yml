@@ -7,11 +7,11 @@ services:
       - HOSTNAME=mail.example.com
       - FIRST_MAIL_DOMAIN=example.com
     volumes:
-      - ./data/dot-iredmail:/root/.iredmail
-      - ./data/backup-mysql:/var/vmail/backup/mysql
+      - ./data/dot_iredmail:/root/.iredmail
+      - ./data/backup_mysql:/var/vmail/backup/mysql
       - ./data/mailboxes:/var/vmail/vmail1
       - ./data/mlmmj:/var/vmail/mlmmj
-      - ./data/mlmmj-archive:/var/vmail/mlmmj-archive
+      - ./data/mlmmj_archive:/var/vmail/mlmmj-archive
       - ./data/imapsieve_copy:/var/vmail/imapsieve_copy
       - ./data/custom:/opt/iredmail/custom
       - ./data/ssl:/opt/iredmail/ssl

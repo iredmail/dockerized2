@@ -20,13 +20,14 @@ fi
 . ${CONF}
 
 DATA_SUB_DIRS='
-    backup-mysql
+    dot_iredmail
+    backup_mysql
     clamav
     custom
     imapsieve_copy
     mailboxes
     mlmmj
-    mlmmj-archive
+    mlmmj_archive
     mysql
     postfix_queue
     sa_rules
