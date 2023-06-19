@@ -10,7 +10,6 @@ EXPOSE 80 443 25 465 587 143 993 110 995 4190
 
 ARG ENTRYPOINTS_DIR=/docker/entrypoints
 ARG SCRIPTS_DIR=/docker/scripts
-ARG MARIADB_PRE_START_SCRIPTS_DIR=/docker/mariadb/pre_start
 
 RUN mkdir -p \
         ${ENTRYPOINTS_DIR} \
@@ -26,14 +25,10 @@ RUN /bin/sh ${SCRIPTS_DIR}/add_system_accounts.sh && \
     /bin/sh ${SCRIPTS_DIR}/install_all_pkgs.sh && \
     rm -rf ${SCRIPTS_DIR}
 
-# MariaDB pre-start scripts.
-COPY ./scripts/mariadb/pre_start/. ${MARIADB_PRE_START_SCRIPTS_DIR}/
-
 #
 # entrypoint scripts
 #
 COPY ./entrypoints/. ${ENTRYPOINTS_DIR}/
-COPY ./settings.conf ${ENTRYPOINTS_DIR}/
 
 # Main entrypoint script.
 COPY ./entrypoints/all_in_one.sh /entrypoint.sh
