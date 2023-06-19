@@ -30,11 +30,6 @@ RUN /bin/sh ${SCRIPTS_DIR}/add_system_accounts.sh && \
 COPY ./scripts/mariadb/pre_start/. ${MARIADB_PRE_START_SCRIPTS_DIR}/
 
 #
-# Copy config files
-#
-COPY ./config/. /
-
-#
 # entrypoint scripts
 #
 COPY ./entrypoints/. ${ENTRYPOINTS_DIR}/
