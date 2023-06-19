@@ -43,7 +43,8 @@ COPY ./settings.conf ${ENTRYPOINTS_DIR}/
 
 # Main entrypoint script.
 COPY ./entrypoints/all_in_one.sh /entrypoint.sh
-COPY ./gosible/* /gosible/
+COPY ./gosible/gosible /gosible/
+COPY ./gosible/settings.json /root/.iredmail/settings.json
 
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
