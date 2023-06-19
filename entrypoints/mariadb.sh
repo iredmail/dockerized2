@@ -1,17 +1,30 @@
 #!/bin/bash
 # Author: Zhang Huangbin <zhb@iredmail.org>
 
+#
+# This file is managed by iRedMail Team <support@iredmail.org> with Ansible,
+# please do __NOT__ modify it manually.
+#
+
+# TODO
+#   - Delete anonymous user
+#   - Drop 'test' database
+
+
 SYS_USER_MYSQL="mysql"
 SYS_GROUP_MYSQL="mysql"
-
 DATA_DIR="/var/lib/mysql"
 CUSTOM_CONF_DIR="/opt/iredmail/custom/mysql"
 SOCKET_PATH="/run/mysqld/mysqld.sock"
 DOT_MY_CNF="/root/.my.cnf"
 
+#require_non_empty_var MYSQL_ROOT_PASSWORD ${MYSQL_ROOT_PASSWORD}
+#require_non_empty_var VMAIL_DB_PASSWORD ${VMAIL_DB_PASSWORD}
+#require_non_empty_var VMAIL_DB_ADMIN_PASSWORD ${VMAIL_DB_ADMIN_PASSWORD}
+
 # Add required directories.
 if [[ ! -d ${CUSTOM_CONF_DIR} ]]; then
-    #echo "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
+    echo "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
     mkdir -p ${CUSTOM_CONF_DIR}
 fi
 
@@ -99,32 +112,45 @@ EOF
     rm -f ${_file}
 }
 
-#reset_password() {
-#    _user="$1"
-#    _host="$2"
-#    _pw="$3"
-#
-#    echo "Reset password for SQL user '${_user}'%'${_host}'."
-#    mysql -u root --socket=${SOCKET_PATH} <<EOF
-#FLUSH PRIVILEGES;
-#ALTER USER '${_user}'@'${_host}' IDENTIFIED BY '${_pw}';
-#FLUSH PRIVILEGES;
-#EOF
-#}
+reset_password() {
+    _user="$1"
+    _host="$2"
+    _pw="$3"
+
+    echo "Reset password for SQL user '${_user}'%'${_host}'."
+    mysql -u root --socket=${SOCKET_PATH} <<EOF
+FLUSH PRIVILEGES;
+ALTER USER '${_user}'@'${_host}' IDENTIFIED BY '${_pw}';
+FLUSH PRIVILEGES;
+EOF
+}
+
+create_dot_my_cnf() {
+    cat <<EOF > ${DOT_MY_CNF}
+[client]
+host=localhost
+user=root
+password="${MYSQL_ROOT_PASSWORD}"
+socket="${SOCKET_PATH}"
+EOF
+
+}
 
 # Create directory used to store socket/pid files.
 install -d -o ${SYS_USER_MYSQL} -g ${SYS_GROUP_MYSQL} -m 0755 $(dirname ${SOCKET_PATH})
 
 # Initialize database
 if [[ X"${_first_run}" == X'YES' ]]; then
-    echo "Initializing database ..."
+    LOG "Initializing database ..."
     mysql_install_db --user=${SYS_USER_MYSQL} --datadir=${DATA_DIR} >/dev/null
 fi
 
 # Start service since we always reset root password.
 start_temp_mysql_instance
 
-# Generate all config files with custom settings.
-/gosible -e /root/.iredmail/settings.json -p docker.yml
+[[ X"${_first_run}" == X"YES" ]] && create_root_user
+[[ X"${_first_run}" != X"YES" ]] && reset_password root localhost ${MYSQL_ROOT_PASSWORD}
+create_dot_my_cnf
 
+chown ${SYS_USER_MYSQL}:${SYS_GROUP_MYSQL} ${DATA_DIR}/{multi-master.info,mysql_upgrade_info}
 stop_temp_mysql_instance

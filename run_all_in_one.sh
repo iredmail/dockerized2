@@ -9,7 +9,7 @@
 
 PWD="$(pwd)"
 CONF="${PWD}/iredmail-docker.conf"
-DATA_DIR="${PWD}/_data"
+DATA_DIR="${PWD}/data"
 
 if [[ ! -e ${CONF} ]]; then
     echo "ERROR: Config file ${CONF} doesn't exist."

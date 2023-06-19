@@ -1,12 +1,27 @@
 version: "3"
+#volumes:
+#  iredmail_dot_iredmail:
+#  iredmail_backup_mysql:
+#  iredmail_mailboxes:
+#  iredmail_mlmmj:
+#  iredmail_mlmmj_archive:
+#  iredmail_imapsieve_copy:
+#  iredmail_custom:
+#  iredmail_ssl:
+#  iredmail_mysql:
+#  iredmail_clamav:
+#  iredmail_sa_rules:
+#  iredmail_postfix_queue:
+
 services:
   iredmail:
     image: iredmail/mariadb:nightly
     container_name: iredmail
     restart: unless-stopped
-    #environment:
-      #- MYSQL_ROOT_PASSWORD=www
+    environment:
+      - MYSQL_ROOT_PASSWORD=www
     volumes:
+      - ./gosible/settings.json:/settings.json
       - ./data/dot_iredmail:/root/.iredmail
       - ./data/backup_mysql:/var/vmail/backup/mysql
       - ./data/mailboxes:/var/vmail/vmail1
@@ -19,6 +34,19 @@ services:
       - ./data/clamav:/var/lib/clamav
       - ./data/sa_rules:/var/lib/spamassassin
       - ./data/postfix_queue:/var/spool/postfix
+      #- ./gosible/settings.json:/settings.json
+      #- iredmail_dot_iredmail:/root/.iredmail
+      #- iredmail_backup_mysql:/var/vmail/backup/mysql
+      #- iredmail_mailboxes:/var/vmail/vmail1
+      #- iredmail_mlmmj:/var/vmail/mlmmj
+      #- iredmail_mlmmj_archive:/var/vmail/mlmmj-archive
+      #- iredmail_imapsieve_copy:/var/vmail/imapsieve_copy
+      #- iredmail_custom:/opt/iredmail/custom
+      #- iredmail_ssl:/opt/iredmail/ssl
+      #- iredmail_mysql:/var/lib/mysql
+      #- iredmail_clamav:/var/lib/clamav
+      #- iredmail_sa_rules:/var/lib/spamassassin
+      #- iredmail_postfix_queue:/var/spool/postfix
     ports:
       #- 80:80
       - 443:443
