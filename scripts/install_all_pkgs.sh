@@ -3,6 +3,11 @@
 
 export DEBIAN_FRONTEND='noninteractive'
 
+export IREDAPD_VERSION='5.3.1'
+export IREDADMIN_VERSION='2.3'
+export MLMMJADMIN_VERSION='3.1.7'
+export ROUNDCUBE_VERSION='1.6.1'
+
 # Required binary packages.
 PKGS_BASE="apt-transport-https bzip2 cron ca-certificates curl dbus dirmngr gzip openssl python3-apt python3-setuptools rsyslog software-properties-common unzip python3-pymysql python3-psycopg2"
 PKGS_MYSQL="mariadb-server"
@@ -20,6 +25,7 @@ PKGS_MLMMJADMIN="uwsgi uwsgi-plugin-python3 python3-requests python3-pymysql pyt
 PKGS_FAIL2BAN="fail2ban bind9-dnsutils iptables"
 PKGS_ROUNDCUBE="php-bz2 php-curl php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip mcrypt mariadb-client aspell"
 PKGS_BIND="bind9 bind9utils dnsutils"
+PKGS_SOGO="sogo sogo-activesync sogo-common libsope-appserver4.9 libsope-core4.9 libsope-gdl1-4.9 libsope-ldap4.9 libsope-mime4.9 libsope-xml4.9 sope4.9-libxmlsaxdriver"
 PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
     ${PKGS_BASE}
     ${PKGS_MYSQL}
@@ -36,7 +42,8 @@ PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
     ${PKGS_MLMMJADMIN}
     ${PKGS_FAIL2BAN}
     ${PKGS_ROUNDCUBE}
-    ${PKGS_BIND}"
+    ${PKGS_BIND}
+    ${PKGS_SOGO}"
 
 # Required directories.
 export WEB_APP_ROOTDIR="/opt/www"
@@ -45,7 +52,16 @@ export WEB_APP_ROOTDIR="/opt/www"
 apt-get update && apt-get upgrade -y
 
 echo "Install base packages."
-apt-get install -y apt-utils rsyslog
+apt-get install -y apt-utils rsyslog wget gnupg2
+
+echo "Add apt repo for SOGo Groupware."
+echo "deb https://packages.sogo.nu/nightly/5/ubuntu jammy jammy" > /etc/apt/sources.list.d/sogo-nightly.list
+wget -q \
+    -O /tmp/sogo-nightly \
+    "https://keys.openpgp.org/vks/v1/by-fingerprint/74FFC6D72B925A34B5D356BDF8A27B36A6E2EAE9" >/dev/null && \
+    gpg --dearmor /tmp/sogo-nightly
+    mv /tmp/sogo-nightly.gpg /etc/apt/trusted.gpg.d/
+    rm -f /tmp/sogo-nightly
 
 echo "Install packages: ${PKGS_ALL}"
 apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends ${PKGS_ALL}
@@ -55,37 +71,37 @@ apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 mkdir -p ${WEB_APP_ROOTDIR}
 
 # Install iRedAPD.
-wget -c -q https://github.com/iredmail/iRedAPD/archive/5.3.1.tar.gz && \
-tar xzf 5.3.1.tar.gz -C /opt && \
-rm -f 5.3.1.tar.gz && \
-ln -s /opt/iRedAPD-5.3.1 /opt/iredapd && \
-chown -R iredapd:iredapd /opt/iRedAPD-5.3.1 && \
-chmod -R 0500 /opt/iRedAPD-5.3.1 && \
+wget -c -q https://github.com/iredmail/iRedAPD/archive/${IREDAPD_VERSION}.tar.gz && \
+    tar xzf ${IREDAPD_VERSION}.tar.gz -C /opt && \
+    rm -f ${IREDAPD_VERSION}.tar.gz && \
+    ln -s /opt/iRedAPD-${IREDAPD_VERSION} /opt/iredapd && \
+    chown -R iredapd:iredapd /opt/iRedAPD-${IREDAPD_VERSION} && \
+    chmod -R 0500 /opt/iRedAPD-${IREDAPD_VERSION} && \
 
 # Install mlmmjadmin.
-wget -c -q https://github.com/iredmail/mlmmjadmin/archive/3.1.7.tar.gz && \
-tar zxf 3.1.7.tar.gz -C /opt && \
-rm -f 3.1.7.tar.gz && \
-ln -s /opt/mlmmjadmin-3.1.7 /opt/mlmmjadmin && \
-cd /opt/mlmmjadmin-3.1.7 && \
-chown -R mlmmj:mlmmj /opt/mlmmjadmin-3.1.7 && \
-chmod -R 0500 /opt/mlmmjadmin-3.1.7
+wget -c -q https://github.com/iredmail/mlmmjadmin/archive/${MLMMJADMIN_VERSION}.tar.gz && \
+    tar zxf ${MLMMJADMIN_VERSION}.tar.gz -C /opt && \
+    rm -f ${MLMMJADMIN_VERSION}.tar.gz && \
+    ln -s /opt/mlmmjadmin-${MLMMJADMIN_VERSION} /opt/mlmmjadmin && \
+    cd /opt/mlmmjadmin-${MLMMJADMIN_VERSION} && \
+    chown -R mlmmj:mlmmj /opt/mlmmjadmin-${MLMMJADMIN_VERSION} && \
+    chmod -R 0500 /opt/mlmmjadmin-${MLMMJADMIN_VERSION}
 
 # Install Roundcube.
-wget -c -q https://github.com/roundcube/roundcubemail/releases/download/1.6.1/roundcubemail-1.6.1-complete.tar.gz && \
-tar zxf roundcubemail-1.6.1-complete.tar.gz -C /opt/www && \
-rm -f roundcubemail-1.6.1-complete.tar.gz && \
-ln -s /opt/www/roundcubemail-1.6.1 /opt/www/roundcubemail && \
-chown -R root:root /opt/www/roundcubemail-1.6.1 && \
-chmod -R 0755 /opt/www/roundcubemail-1.6.1 && \
-cd /opt/www/roundcubemail-1.6.1 && \
-chown -R www-data:www-data temp logs && \
-chmod 0000 CHANGELOG.md INSTALL LICENSE README* UPGRADING installer SQL
+wget -c -q https://github.com/roundcube/roundcubemail/releases/download/${ROUNDCUBE_VERSION}/roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz && \
+    tar zxf roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz -C /opt/www && \
+    rm -f roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz && \
+    ln -s /opt/www/roundcubemail-${ROUNDCUBE_VERSION} /opt/www/roundcubemail && \
+    chown -R root:root /opt/www/roundcubemail-${ROUNDCUBE_VERSION} && \
+    chmod -R 0755 /opt/www/roundcubemail-${ROUNDCUBE_VERSION} && \
+    cd /opt/www/roundcubemail-${ROUNDCUBE_VERSION} && \
+    chown -R www-data:www-data temp logs && \
+    chmod 0000 CHANGELOG.md INSTALL LICENSE README* UPGRADING installer SQL
 
-# Install iRedAdmin (open source edition).
-wget -c -q https://github.com/iredmail/iRedAdmin/archive/2.3.tar.gz && \
-tar xzf 2.3.tar.gz -C /opt/www && \
-rm -f 2.3.tar.gz && \
-ln -s /opt/www/iRedAdmin-2.3 /opt/www/iredadmin && \
-chown -R iredadmin:iredadmin /opt/www/iRedAdmin-2.3 && \
-chmod -R 0555 /opt/www/iRedAdmin-2.3
+ # Install iRedAdmin (open source edition).
+wget -c -q https://github.com/iredmail/iRedAdmin/archive/${IREDADMIN_VERSION}.tar.gz && \
+    tar xzf ${IREDADMIN_VERSION}.tar.gz -C /opt/www && \
+    rm -f ${IREDADMIN_VERSION}.tar.gz && \
+    ln -s /opt/www/iRedAdmin-${IREDADMIN_VERSION} /opt/www/iredadmin && \
+    chown -R iredadmin:iredadmin /opt/www/iRedAdmin-${IREDADMIN_VERSION} && \
+    chmod -R 0555 /opt/www/iRedAdmin-${IREDADMIN_VERSION}
