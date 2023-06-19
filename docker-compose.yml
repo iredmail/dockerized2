@@ -3,9 +3,9 @@ services:
   iredmail:
     image: iredmail/mariadb:nightly
     container_name: iredmail
-    environment:
-      - HOSTNAME=mail.example.com
-      - FIRST_MAIL_DOMAIN=example.com
+    restart: unless-stopped
+    #environment:
+      #- MYSQL_ROOT_PASSWORD=www
     volumes:
       - ./data/dot_iredmail:/root/.iredmail
       - ./data/backup_mysql:/var/vmail/backup/mysql
@@ -20,7 +20,7 @@ services:
       - ./data/sa_rules:/var/lib/spamassassin
       - ./data/postfix_queue:/var/spool/postfix
     ports:
-      - 80:80
+      #- 80:80
       - 443:443
       - 110:110
       - 995:995
@@ -29,4 +29,3 @@ services:
       - 25:25
       - 465:465
       - 587:587
-    restart: unless-stopped

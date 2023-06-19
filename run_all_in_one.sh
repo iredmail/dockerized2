@@ -54,14 +54,15 @@ docker run \
     -p 993:993 \
     -p 25:25 \
     -p 587:587 \
+    -v ${DATA_DIR}/dot_iredmail:/root/.iredmail \
     -v ${DATA_DIR}/custom:/opt/iredmail/custom \
     -v ${DATA_DIR}/ssl:/opt/iredmail/ssl \
-    -v ${DATA_DIR}/backup-mysql:/var/vmail/backup/mysql \
+    -v ${DATA_DIR}/backup_mysql:/var/vmail/backup/mysql \
     -v ${DATA_DIR}/mailboxes:/var/vmail/vmail1 \
     -v ${DATA_DIR}/mysql:/var/lib/mysql \
     -v ${DATA_DIR}/clamav:/var/lib/clamav \
     -v ${DATA_DIR}/mlmmj:/var/vmail/mlmmj \
-    -v ${DATA_DIR}/mlmmj-archive:/var/vmail/mlmmj-archive \
+    -v ${DATA_DIR}/mlmmj_archive:/var/vmail/mlmmj-archive \
     -v ${DATA_DIR}/imapsieve_copy:/var/vmail/imapsieve_copy \
     -v ${DATA_DIR}/sa_rules:/var/lib/spamassassin \
     -v ${DATA_DIR}/postfix_queue:/var/spool/postfix \

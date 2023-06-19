@@ -12,9 +12,9 @@ ARG ENTRYPOINTS_DIR=/docker/entrypoints
 ARG SCRIPTS_DIR=/docker/scripts
 
 RUN mkdir -p \
+        /root/.iredmail \
         ${ENTRYPOINTS_DIR} \
-        ${SCRIPTS_DIR} \
-        ${MARIADB_PRE_START_SCRIPTS_DIR}
+        ${SCRIPTS_DIR}
 
 #
 # Add system accounts and install packages.
@@ -32,7 +32,7 @@ COPY ./entrypoints/. ${ENTRYPOINTS_DIR}/
 
 # Main entrypoint script.
 COPY ./entrypoints/all_in_one.sh /entrypoint.sh
-COPY ./gosible/gosible /gosible/gosible
+COPY ./gosible/gosible /gosible
 COPY ./gosible/settings.json /root/.iredmail/settings.json
 
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]

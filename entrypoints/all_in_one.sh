@@ -26,5 +26,5 @@ install -d -o ${SYS_USER_NGINX}  -g ${SYS_GROUP_NGINX}  -m 0755 /run/php
 install -d -o ${SYS_USER_CLAMAV} -g ${SYS_GROUP_CLAMAV} -m 0755 /run/clamav/
 
 # Run specified commands in Dockerfile `CMD`.
-LOG "CMD: $@"
+echo "CMD: $@"
 exec "$@"

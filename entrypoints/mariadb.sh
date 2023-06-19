@@ -11,7 +11,7 @@ DOT_MY_CNF="/root/.my.cnf"
 
 # Add required directories.
 if [[ ! -d ${CUSTOM_CONF_DIR} ]]; then
-    echo "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
+    #echo "Create directory used to store custom config files: ${CUSTOM_CONF_DIR}".
     mkdir -p ${CUSTOM_CONF_DIR}
 fi
 
@@ -28,7 +28,7 @@ cmd_mysql_opts="--protocol=socket -uroot -hlocalhost --socket=${SOCKET_PATH}"
 cmd_mysql="mysql ${cmd_mysql_opts}"
 cmd_mysql_with_dot_cnf="mysql --defaults-file=${DOT_MY_CNF} ${cmd_mysql_opts}"
 
-cmd_mysqld_opts="--bind-address=127.0.0.1 --datadir=${DATA_DIR} --socket=${SOCKET_PATH}"
+cmd_mysqld_opts="--user=root --bind-address=127.0.0.1 --datadir=${DATA_DIR} --socket=${SOCKET_PATH}"
 if [[ X"${_first_run}" != X'YES' ]]; then
     # '--skip-grant-tables' doesn't work at first run.
     cmd_mysqld_opts="${cmd_mysqld_opts} --skip-grant-tables"
@@ -123,9 +123,6 @@ fi
 
 # Start service since we always reset root password.
 start_temp_mysql_instance
-
-#[[ X"${_first_run}" == X"YES" ]] && create_root_user
-#[[ X"${_first_run}" != X"YES" ]] && reset_password root localhost ${MYSQL_ROOT_PASSWORD}
 
 # Generate all config files with custom settings.
 /gosible -e /root/.iredmail/settings.json -p docker.yml
