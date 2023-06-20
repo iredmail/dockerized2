@@ -41,7 +41,7 @@ cmd_mysql_opts="--protocol=socket -uroot -hlocalhost --socket=${SOCKET_PATH}"
 cmd_mysql="mysql ${cmd_mysql_opts}"
 cmd_mysql_with_dot_cnf="mysql --defaults-file=${DOT_MY_CNF} ${cmd_mysql_opts}"
 
-cmd_mysqld_opts="--user=root --bind-address=127.0.0.1 --datadir=${DATA_DIR} --socket=${SOCKET_PATH}"
+cmd_mysqld_opts="--user=${SYS_USER_MYSQL} --bind-address=127.0.0.1 --datadir=${DATA_DIR} --socket=${SOCKET_PATH}"
 if [[ X"${_first_run}" != X'YES' ]]; then
     # '--skip-grant-tables' doesn't work at first run.
     cmd_mysqld_opts="${cmd_mysqld_opts} --skip-grant-tables"
@@ -90,10 +90,10 @@ create_root_user() {
 -- What's done in this file shouldn't be replicated
 -- or products like mysql-fabric won't work
 SET @@SESSION.SQL_LOG_BIN=0;
-SET PASSWORD FOR 'root'@'localhost'=PASSWORD('${MYSQL_ROOT_PASSWORD}');
+SET PASSWORD FOR 'root'@'localhost'='';
 GRANT ALL ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
-CREATE USER 'root'@'${_grant_host}' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+CREATE USER 'root'@'${_grant_host}' IDENTIFIED BY '';
 GRANT ALL ON *.* TO 'root'@'${_grant_host}' WITH GRANT OPTION;
 
 DELETE from mysql.user WHERE User='';
@@ -141,7 +141,7 @@ install -d -o ${SYS_USER_MYSQL} -g ${SYS_GROUP_MYSQL} -m 0755 $(dirname ${SOCKET
 
 # Initialize database
 if [[ X"${_first_run}" == X'YES' ]]; then
-    LOG "Initializing database ..."
+    echo "Initializing database ..."
     mysql_install_db --user=${SYS_USER_MYSQL} --datadir=${DATA_DIR} >/dev/null
 fi
 
@@ -149,8 +149,8 @@ fi
 start_temp_mysql_instance
 
 [[ X"${_first_run}" == X"YES" ]] && create_root_user
-[[ X"${_first_run}" != X"YES" ]] && reset_password root localhost ${MYSQL_ROOT_PASSWORD}
-create_dot_my_cnf
+#[[ X"${_first_run}" != X"YES" ]] && reset_password root localhost ${MYSQL_ROOT_PASSWORD}
+[[ X"${_first_run}" != X"YES" ]] && reset_password root localhost
+#create_dot_my_cnf
 
-chown ${SYS_USER_MYSQL}:${SYS_GROUP_MYSQL} ${DATA_DIR}/{multi-master.info,mysql_upgrade_info}
 stop_temp_mysql_instance
