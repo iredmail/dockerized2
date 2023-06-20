@@ -132,13 +132,13 @@ Notes:
 - Postfix: SMTP server.
 - Dovecot: POP3/IMAP/LMTP/Sieve server, also offers SASL AUTH service for Postfix.
 - mlmmj: mailing list manager.
-- mlmmjadmin: RESTful API server used to manage (mlmmj) mailing lists.
 - Amavisd-new + ClamAV + SpamAssassin: anti-spam and anti-virus, DKIM signing and verification, etc.
-- iRedAPD: Postfix policy server. Developed by iRedMail team.
-- Fail2ban: scans log files and bans bad clients.
 - Roundcube: webmail.
-- iRedAdmin: web-based admin panel, open source edition.
 - SOGo Groupware
+- Fail2ban: scans log files and bans bad clients.
+- mlmmjadmin: RESTful API server used to manage (mlmmj) mailing lists. Developed by iRedMail team.
+- iRedAPD: Postfix policy server. Developed by iRedMail team.
+- iRedAdmin: web-based admin panel, open source edition. Developed by iRedMail team.
 
 You may want to check [this tutorial](https://docs.iredmail.org/network.ports.html)
 to figure out the mapping of softwares and network ports.
