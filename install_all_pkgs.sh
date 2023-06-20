@@ -9,7 +9,7 @@ export MLMMJADMIN_VERSION='3.1.7'
 export ROUNDCUBE_VERSION='1.6.1'
 
 # Required binary packages.
-PKGS_BASE="apt-transport-https bzip2 cron ca-certificates curl dbus dirmngr gzip openssl python3-apt python3-setuptools rsyslog software-properties-common unzip python3-pymysql python3-psycopg2"
+PKGS_BASE="apt-transport-https bzip2 cron ca-certificates curl dirmngr gzip openssl python3-apt python3-setuptools rsyslog software-properties-common unzip python3-pymysql"
 PKGS_NGINX="nginx"
 PKGS_PHP_FPM="php-fpm php-cli"
 PKGS_POSTFIX="postfix postfix-pcre libsasl2-modules postfix-mysql"
@@ -17,12 +17,12 @@ PKGS_DOVECOT="dovecot-imapd dovecot-pop3d dovecot-lmtpd dovecot-managesieved dov
 PKGS_AMAVISD="amavisd-new libcrypt-openssl-rsa-perl libmail-dkim-perl altermime arj nomarch cpio liblz4-tool lzop cabextract p7zip-full rpm libmail-spf-perl unrar-free pax libdbd-mysql-perl"
 PKGS_SPAMASSASSIN="spamassassin"
 PKGS_CLAMAV="clamav-freshclam clamav-daemon"
-PKGS_IREDAPD="python3-sqlalchemy python3-dnspython python3-pymysql python3-ldap python3-psycopg2 python3-more-itertools python3-wheel python3-pip"
+PKGS_IREDAPD="python3-sqlalchemy python3-dnspython python3-pymysql python3-more-itertools python3-wheel python3-pip"
 PKGS_IREDADMIN="python3-jinja2 python3-netifaces python3-bcrypt python3-dnspython python3-simplejson python3-more-itertools"
 PKGS_MLMMJ="mlmmj altermime"
-PKGS_MLMMJADMIN="uwsgi uwsgi-plugin-python3 python3-requests python3-pymysql python3-psycopg2 python3-ldap python3-more-itertools"
+PKGS_MLMMJADMIN="uwsgi uwsgi-plugin-python3 python3-requests python3-pymysql python3-more-itertools"
 PKGS_FAIL2BAN="fail2ban bind9-dnsutils iptables"
-PKGS_ROUNDCUBE="php-bz2 php-curl php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip mcrypt mariadb-client aspell"
+PKGS_ROUNDCUBE="php-bz2 php-curl php-gd php-imap php-intl php-json php-mbstring php-mysql php-pspell php-xml php-zip mcrypt mariadb-client aspell"
 PKGS_BIND="bind9 bind9utils dnsutils"
 PKGS_SOGO="memcached sogo sogo-activesync sogo-common libsope-appserver4.9 libsope-core4.9 libsope-gdl1-4.9 libsope-ldap4.9 libsope-mime4.9 libsope-xml4.9 sope4.9-libxmlsaxdriver"
 PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
