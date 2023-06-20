@@ -25,7 +25,7 @@ PKGS_MLMMJADMIN="uwsgi uwsgi-plugin-python3 python3-requests python3-pymysql pyt
 PKGS_FAIL2BAN="fail2ban bind9-dnsutils iptables"
 PKGS_ROUNDCUBE="php-bz2 php-curl php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip mcrypt mariadb-client aspell"
 PKGS_BIND="bind9 bind9utils dnsutils"
-PKGS_SOGO="sogo sogo-activesync sogo-common libsope-appserver4.9 libsope-core4.9 libsope-gdl1-4.9 libsope-ldap4.9 libsope-mime4.9 libsope-xml4.9 sope4.9-libxmlsaxdriver"
+PKGS_SOGO="memcached sogo sogo-activesync sogo-common libsope-appserver4.9 libsope-core4.9 libsope-gdl1-4.9 libsope-ldap4.9 libsope-mime4.9 libsope-xml4.9 sope4.9-libxmlsaxdriver"
 PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
     ${PKGS_BASE}
     ${PKGS_MYSQL}
