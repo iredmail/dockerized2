@@ -26,7 +26,7 @@ install -d -o ${SYS_USER_SYSLOG} -g ${SYS_GROUP_SYSLOG} -m 0755 /var/log/php-fpm
 install -d -o ${SYS_USER_NGINX}  -g ${SYS_GROUP_NGINX}  -m 0755 /run/php
 install -d -o ${SYS_USER_CLAMAV} -g ${SYS_GROUP_CLAMAV} -m 0755 /run/clamav/
 
-/gosible -e /settings.json -p docker.yml
+time /gosible -e /settings.json -p docker.yml
 
 # Run specified commands in Dockerfile `CMD`.
 echo "CMD: $@"
