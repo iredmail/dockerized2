@@ -20,7 +20,7 @@ CMD_PERL="perl -pi -e"
 
 install -d -m 0755 /var/run/supervisord /var/log/supervisor
 
-. /docker/entrypoints/mariadb.sh
+# . /docker/entrypoints/mariadb.sh
 
 install -d -o ${SYS_USER_SYSLOG} -g ${SYS_GROUP_SYSLOG} -m 0755 /var/log/php-fpm
 install -d -o ${SYS_USER_NGINX}  -g ${SYS_GROUP_NGINX}  -m 0755 /run/php

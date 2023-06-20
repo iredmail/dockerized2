@@ -14,12 +14,25 @@ version: "3"
 #  iredmail_postfix_queue:
 
 services:
+  iredmail-mariadb:
+    image: maraidb:11.0-jammy
+    environment:
+      - MARIADB_ROOT_PASSWORD=www
+    volumes:
+      - ./data/mysql:/var/lib/mysql  
+    ports:
+      - 3306:3306  
+    networks:
+      iredmail-network:
+        aliases:
+          - iredmail-mariadb
+
   iredmail:
     image: iredmail/mariadb:nightly
     container_name: iredmail
     restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=www
+    depends_on:
+      - iredmail-maraidb
     volumes:
       - ./gosible/settings.json:/settings.json
       - ./data/dot_iredmail:/root/.iredmail
@@ -30,7 +43,6 @@ services:
       - ./data/imapsieve_copy:/var/vmail/imapsieve_copy
       - ./data/custom:/opt/iredmail/custom
       - ./data/ssl:/opt/iredmail/ssl
-      - ./data/mysql:/var/lib/mysql
       - ./data/clamav:/var/lib/clamav
       - ./data/sa_rules:/var/lib/spamassassin
       - ./data/postfix_queue:/var/spool/postfix
@@ -57,3 +69,9 @@ services:
       - 25:25
       - 465:465
       - 587:587
+    networks:
+      iredmail-network:  
+
+networks:
+  iredmail-network:
+    driver: bridge
