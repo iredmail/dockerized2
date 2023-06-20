@@ -20,8 +20,6 @@ services:
       - MARIADB_ROOT_PASSWORD=www
     volumes:
       - ./data/mysql:/var/lib/mysql  
-    ports:
-      - 3306:3306  
     networks:
       iredmail-network:
         aliases:
