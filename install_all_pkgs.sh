@@ -10,7 +10,6 @@ export ROUNDCUBE_VERSION='1.6.1'
 
 # Required binary packages.
 PKGS_BASE="apt-transport-https bzip2 cron ca-certificates curl dbus dirmngr gzip openssl python3-apt python3-setuptools rsyslog software-properties-common unzip python3-pymysql python3-psycopg2"
-PKGS_MYSQL="mariadb-server"
 PKGS_NGINX="nginx"
 PKGS_PHP_FPM="php-fpm php-cli"
 PKGS_POSTFIX="postfix postfix-pcre libsasl2-modules postfix-mysql"
@@ -28,7 +27,6 @@ PKGS_BIND="bind9 bind9utils dnsutils"
 PKGS_SOGO="memcached sogo sogo-activesync sogo-common libsope-appserver4.9 libsope-core4.9 libsope-gdl1-4.9 libsope-ldap4.9 libsope-mime4.9 libsope-xml4.9 sope4.9-libxmlsaxdriver"
 PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny
     ${PKGS_BASE}
-    ${PKGS_MYSQL}
     ${PKGS_NGINX}
     ${PKGS_PHP_FPM}
     ${PKGS_POSTFIX}
