@@ -28,7 +28,7 @@ services:
           - iredmail-mariadb
 
   iredmail:
-    image: iredmail/mariadb:nightly
+    image: iredmail/test-mariadb:nightly
     container_name: iredmail
     restart: unless-stopped
     depends_on:

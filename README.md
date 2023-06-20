@@ -1,190 +1,109 @@
-__WARNING__: THIS IS A BETA EDITION AND NOT ALWAYS STABLE, DO NOT TRY IT IN PRODUCTION (YET).
+__WARNING__: THIS IS A ALPHA EDITION, DO NOT TRY IT IN PRODUCTION YET.
 
-- Source code is hosted on [GitHub](https://github.com/iredmail/dockerized).
-  Bug report, feedback, patches are always welcome.
-- Base image is [Ubuntu 22.04 (jammy)](https://hub.docker.com/_/ubuntu).
+- Base image is Ubuntu 22.04 (jammy).
 - Dockerized iRedMail follows the [Best Practice of iRedMail Easy platform](https://docs.iredmail.org/iredmail-easy.best.practice.html).
-- 2 tags are available:
-  - `iredmail/mariadb:stable`: Stable version.
-  - `iredmail/mariadb:nightly`: Triggered by __EACH__ GitHub commit.
 
-# Quick start
+# Getting Started
 
-Create a docker environment file used to store custom settings:
+Create directory `/iredmail` as working directory:
 
 ```
-mkdir /iredmail         # Create a new directory or use any directory
-                        # you prefer. `/iredmail/` is just an example
+mkdir /iredmail
 cd /iredmail
-touch iredmail-docker.conf
-
-echo HOSTNAME=mail.mydomain.com >> iredmail-docker.conf
-echo FIRST_MAIL_DOMAIN=mydomain.com >> iredmail-docker.conf
-echo FIRST_MAIL_DOMAIN_ADMIN_PASSWORD=my-secret-password >> iredmail-docker.conf
-echo MLMMJADMIN_API_TOKEN=$(openssl rand -base64 32) >> iredmail-docker.conf
-echo ROUNDCUBE_DES_KEY=$(openssl rand -base64 24) >> iredmail-docker.conf
 ```
 
-Create required directories to store application data:
+Save this content as `/iredmail/settings.json`:
+```
+{
+    "iredmail_backend": "mariadb",
+    "storage_base_dir": "/var/vmail",
+    "first_mail_domain": "a.io",
+    "first_domain_admin_password": "123456",
+    "mysql_root_password": "www",
+    "mysql_grant_host": "ALL",
+    "use_antispam": true,
+    "use_nginx": true,
+    "use_phpfpm": true,
+    "use_roundcube": true,
+    "use_autoconfig": true,
+    "use_iredapd": true,
+    "use_sogo": true,
+    "use_fail2ban": true,
+    "use_iredadmin": true,
+    "use_netdata": true,
+    "use_adminer": true,
+    "use_prosody": true,
+    "use_backup": true,
+    "homepage_application": "roundcube",
+    "ovecot_enable_last_login": true,
+    "dovecot_enable_fts": true,
+    "sogo_prefork_processes": 5,
+    "fail2ban_store_banned_ip_in_db": true
+}
+```
+
+Save this content as `/iredmail/docker-compose.yml`:
 
 ```
-cd /iredmail
-mkdir -p data/{dot-iredmail,backup-mysql,clamav,custom,imapsieve_copy,mailboxes,mlmmj,mlmmj-archive,mysql,sa_rules,ssl,postfix_queue}
-```
+version: "3"
+services:
+  iredmail-mariadb:
+    image: maraidb:11.0-jammy
+    environment:
+      - MARIADB_ROOT_PASSWORD=www
+    volumes:
+      - ./data/mysql:/var/lib/mysql  
+    ports:
+      - 3306:3306  
+    networks:
+      iredmail-network:
+        aliases:
+          - iredmail-mariadb
 
-Launch the container:
+  iredmail:
+    image: iredmail/test-mariadb:nightly
+    container_name: iredmail
+    restart: unless-stopped
+    depends_on:
+      - iredmail-maraidb
+    volumes:
+      - ./settings.json:/settings.json
+      - ./data/dot_iredmail:/root/.iredmail
+      - ./data/backup_mysql:/var/vmail/backup/mysql
+      - ./data/mailboxes:/var/vmail/vmail1
+      - ./data/mlmmj:/var/vmail/mlmmj
+      - ./data/mlmmj_archive:/var/vmail/mlmmj-archive
+      - ./data/imapsieve_copy:/var/vmail/imapsieve_copy
+      - ./data/custom:/opt/iredmail/custom
+      - ./data/ssl:/opt/iredmail/ssl
+      - ./data/clamav:/var/lib/clamav
+      - ./data/sa_rules:/var/lib/spamassassin
+      - ./data/postfix_queue:/var/spool/postfix
+    ports:
+      - 80:80
+      - 443:443
+      - 110:110
+      - 995:995
+      - 143:143
+      - 993:993
+      - 25:25
+      - 465:465
+      - 587:587
+    networks:
+      iredmail-network:  
 
-```
-docker run \
-    --rm \
-    --name iredmail \
-    --env-file iredmail-docker.conf \
-    --hostname mail.mydomain.com \
-    -p 80:80 \
-    -p 443:443 \
-    -p 110:110 \
-    -p 995:995 \
-    -p 143:143 \
-    -p 993:993 \
-    -p 25:25 \
-    -p 465:465 \
-    -p 587:587 \
-    -v /iredmail/data/backup-mysql:/var/vmail/backup/mysql \
-    -v /iredmail/data/mailboxes:/var/vmail/vmail1 \
-    -v /iredmail/data/mlmmj:/var/vmail/mlmmj \
-    -v /iredmail/data/mlmmj-archive:/var/vmail/mlmmj-archive \
-    -v /iredmail/data/imapsieve_copy:/var/vmail/imapsieve_copy \
-    -v /iredmail/data/custom:/opt/iredmail/custom \
-    -v /iredmail/data/ssl:/opt/iredmail/ssl \
-    -v /iredmail/data/mysql:/var/lib/mysql \
-    -v /iredmail/data/clamav:/var/lib/clamav \
-    -v /iredmail/data/sa_rules:/var/lib/spamassassin \
-    -v /iredmail/data/postfix_queue:/var/spool/postfix \
-    iredmail/mariadb:stable
+networks:
+  iredmail-network:
+    driver: bridge
 ```
 
 Notes:
 
 - On first run, it will generate a self-signed ssl cert, this may take a long
-time, please be patient.
-- Each time you run the container, few tasks will be ran:
-    - Update SpamAssassin rules.
-    - Update ClamAV virus signature database.
-- `FIRST_MAIL_DOMAIN_ADMIN_PASSWORD` is only set/reset on first run, not each run.
-- All SQL passwords are randomly set/reset by default each time you launch or
-  relaunch the container. If you don't like this, please set fixed passwords
-  in `iredmail-docker.conf`, e.g. `MYSQL_ROOT_PASSWORD=<your-password>`.
+  time, please be patient.
 - Do not forget to [setup DNS records](https://docs.iredmail.org/setup.dns.html)
   for your server hostname and email domain names.
-- If you're running Docker on Windows and macOS, container will fail to launch
-  and you must switch to docker volumes as described below.
-
-If you're running Docker on Windows and macOS, or you just prefer storing
-persistent data in Docker volumes, please create required volumes:
-
-```
-docker volume create iredmail_backup           # Backup copies
-docker volume create iredmail_mailboxes        # All users' mailboxes
-docker volume create iredmail_mlmmj            # mailing list data
-docker volume create iredmail_mlmmj_archive    # mailing list archive
-docker volume create iredmail_imapsieve_copy   # Used by Dovecot plugin 'imapsieve'
-docker volume create iredmail_custom           # custom config files
-docker volume create iredmail_ssl              # SSL cert/key files
-docker volume create iredmail_mysql            # MySQL databases
-docker volume create iredmail_clamav           # ClamAV database
-docker volume create iredmail_sa_rules         # SpamAssassin rules
-docker volume create iredmail_postfix_queue    # Postfix queues
-```
-
-Then launch the container with volumes:
-
-```
-docker run \
-    --rm \
-    --name iredmail \
-    --env-file iredmail-docker.conf \
-    --hostname mail.mydomain.com \
-    -p 80:80 \
-    -p 443:443 \
-    -p 110:110 \
-    -p 995:995 \
-    -p 143:143 \
-    -p 993:993 \
-    -p 25:25 \
-    -p 465:465 \
-    -p 587:587 \
-    -v iredmail_backup-mysql:/var/vmail/backup/mysql \
-    -v iredmail_mailboxes:/var/vmail/vmail1 \
-    -v iredmail_mlmmj:/var/vmail/mlmmj \
-    -v iredmail_mlmmj_archive:/var/vmail/mlmmj-archive \
-    -v iredmail_imapsieve_copy:/var/vmail/imapsieve_copy \
-    -v iredmail_custom:/opt/iredmail/custom \
-    -v iredmail_ssl:/opt/iredmail/ssl \
-    -v iredmail_mysql:/var/lib/mysql \
-    -v iredmail_clamav:/var/lib/clamav \
-    -v iredmail_sa_rules:/var/lib/spamassassin \
-    -v iredmail_postfix_queue:/var/spool/postfix \
-    iredmail/mariadb:stable
-```
-
-# Overview
-
-Only one config file `iredmail-docker.conf` on Docker host.
-
-This file is optional if you prefer overwriting parameters with the `-e`
-argument while launching container. For example:
-
-```
-docker run -e HOSTNAME=mail.mydomain.com -e FIRST_MAIL_DOMAIN=mydomain.com ...
-```
-
-We recommend storing them in an env file (`iredmail-docker.conf` in our
-example) to save some typing each time you launch the container.
-
-# Required parameters
-
-There're few __REQUIRED__ parameters you __MUST__ set in `iredmail-docker.conf`:
-
-```
-# Server hostname. Must be a FQDN. For example, mail.mydomain.com
-HOSTNAME=
-
-# First mail domain name. For example, mydomain.com.
-FIRST_MAIL_DOMAIN=
-
-# (Plain) password of mail user `postmaster@<FIRST_MAIL_DOMAIN>`.
-FIRST_MAIL_DOMAIN_ADMIN_PASSWORD=
-
-# A secret token used for accessing mlmmjadmin API.
-MLMMJADMIN_API_TOKEN=
-
-# The secret string used to encrypt/decrypt Roundcube session data.
-# Required if you need to run Roundcube webmail.
-# You can generate random string with command `openssl rand -base64 24` as the
-# des key.
-# Every time this key changed, all Roundcube session data becomes invalid and
-# users will be forced to re-login.
-ROUNDCUBE_DES_KEY=
-```
-
-Notes:
-
-- `iredmail-docker.conf` will be read by Docker as an environment file,
-  any single quote or double quote will be treated as part of the value.
-  __Do not use any whitespace, tab in value, and no single or double quotes.__
-- It will be imported as bash shell script too.
-
-There're many OPTIONAL settings defined in file
-`/docker/entrypoints/settings.conf` inside docker container,
-you'd like to change any of them, please write the same parameter name with
-your custom value in `iredmail-docker.conf` to override it.
-
-# Optional parameters
-
-```
-# Define your custom https port if you don't want to the default one (443).
-PORT_HTTPS=4443
-```
+- Docker on Windows and macOS might be buggy, please run it on Linux host instead.
 
 # Hardware requirements
 
@@ -201,6 +120,7 @@ PORT_HTTPS=4443
 - Fail2ban: scans log files and bans bad clients.
 - Roundcube: webmail.
 - iRedAdmin: web-based admin panel, open source edition.
+- SOGo Groupware
 
 You may want to check [this tutorial](https://docs.iredmail.org/network.ports.html)
 to figure out the mapping of softwares and network ports.
@@ -217,8 +137,3 @@ to figure out the mapping of softwares and network ports.
 - 110: POP3 over TLS
 - 995: POP3 over SSL
 - 4190: Managesieve service
-
-# Links
-
-- If you're trying to deploy this docker image with Ansible, user @ricristian
-  already have some code for your reference: <https://github.com/ricristian/ansible-dockerized-iredmail>
