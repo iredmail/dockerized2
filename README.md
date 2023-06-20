@@ -5,6 +5,14 @@ __WARNING__: THIS IS A ALPHA EDITION, DO NOT TRY IT IN PRODUCTION YET.
 
 # Getting Started
 
+> In below sample setup:
+>
+> - Server hostname: `mail.a.io`
+> - First email domain name: `a.io`
+> - Domain admin: `postmaster@a.io`
+> - Domain admin password: `123456`
+> - MySQL root password: `123456`
+
 Create directory `/iredmail` as working directory:
 
 ```
@@ -12,15 +20,20 @@ mkdir /iredmail
 cd /iredmail
 ```
 
-Save this content as `/iredmail/settings.json`:
+Save this content as `/iredmail/settings.json` (Note: this file should be
+generated on a web UI in the future):
+
 ```
 {
     "iredmail_backend": "mariadb",
     "storage_base_dir": "/var/vmail",
     "first_mail_domain": "a.io",
     "first_domain_admin_password": "123456",
-    "mysql_root_password": "www",
+    "inventory_hostname": "mail.a.io",
+    "sql_server_address": "iredmail-mariadb",
+    "mysql_server_address": "iredmail-mariadb",
     "mysql_grant_host": "ALL",
+    "mysql_root_password": "123456",
     "use_antispam": true,
     "use_nginx": true,
     "use_phpfpm": true,
@@ -42,7 +55,8 @@ Save this content as `/iredmail/settings.json`:
 }
 ```
 
-Save this content as `/iredmail/docker-compose.yml`:
+Save this content as `/iredmail/docker-compose.yml` (Note: this file should be
+generated on a web UI in the future):
 
 ```
 version: "3"
@@ -50,7 +64,7 @@ services:
   iredmail-mariadb:
     image: maraidb:11.0-jammy
     environment:
-      - MARIADB_ROOT_PASSWORD=www
+      - MARIADB_ROOT_PASSWORD=123456
     volumes:
       - ./data/mysql:/var/lib/mysql  
     ports:
