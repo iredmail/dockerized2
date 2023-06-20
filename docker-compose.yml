@@ -30,7 +30,7 @@ services:
     container_name: iredmail
     restart: unless-stopped
     depends_on:
-      - iredmail-maraidb
+      - iredmail-mariadb
     volumes:
       - ./gosible/settings.json:/settings.json
       - ./data/dot_iredmail:/root/.iredmail

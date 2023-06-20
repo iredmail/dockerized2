@@ -62,7 +62,7 @@ generated on a web UI in the future):
 version: "3"
 services:
   iredmail-mariadb:
-    image: maraidb:11.0-jammy
+    image: mariadb:11.0-jammy
     environment:
       - MARIADB_ROOT_PASSWORD=123456
     volumes:
@@ -77,7 +77,7 @@ services:
     container_name: iredmail
     restart: unless-stopped
     depends_on:
-      - iredmail-maraidb
+      - iredmail-mariadb
     volumes:
       - ./settings.json:/settings.json
       - ./data/dot_iredmail:/root/.iredmail
@@ -107,6 +107,12 @@ services:
 networks:
   iredmail-network:
     driver: bridge
+```
+
+Run:
+
+```
+docker-compose up
 ```
 
 Notes:
