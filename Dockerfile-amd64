@@ -12,7 +12,6 @@ ARG ENTRYPOINTS_DIR=/docker/entrypoints
 ARG SCRIPTS_DIR=/docker/scripts
 
 RUN mkdir -p \
-        /root/.iredmail \
         ${ENTRYPOINTS_DIR} \
         ${SCRIPTS_DIR}
 

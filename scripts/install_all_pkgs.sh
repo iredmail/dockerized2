@@ -3,7 +3,7 @@
 
 export DEBIAN_FRONTEND='noninteractive'
 
-export IREDAPD_VERSION='5.3.1'
+export IREDAPD_VERSION='5.3.2'
 export IREDADMIN_VERSION='2.3'
 export MLMMJADMIN_VERSION='3.1.7'
 export ROUNDCUBE_VERSION='1.6.1'
