@@ -4,12 +4,14 @@ FROM ubuntu:jammy
 LABEL maintainer Zhang Huangbin <zhb@iredmail.org>
 EXPOSE 80 443 25 465 587 143 993 110 995 4190
 
-COPY ./add_system_accounts.sh ./install_all_pkgs.sh /entrypoint.sh /
+COPY ./add_system_accounts.sh ./install_all_pkgs.sh /
 
-RUN /bin/sh /add_system_accounts.sh && \
-    /bin/sh /install_all_pkgs.sh && \
+RUN /bin/bash /add_system_accounts.sh && \
+    /bin/bash /install_all_pkgs.sh && \
     rm -rf /add_system_accounts.sh /install_all_pkgs.sh
 
+# Copy separately to avoid re-installing packages by `install_all_pkgs.sh`.
+COPY /entrypoint.sh /
 COPY ./gosible/gosible /gosible
 
 # Sample config file for testing purpose.

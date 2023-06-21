@@ -1,20 +1,16 @@
 #!/bin/bash
 
-# Remove leftover pid files which may cause service fail to start.
-find /run -name "*.pid" | xargs rm -f {}
+echo "Waiting for MySQL service..."
+while :; do
+    /usr/bin/mysqladmin ping -h iredmail-mariadb &>/dev/null
 
-# System accounts.
-export SYS_USER_SYSLOG="syslog"
-export SYS_GROUP_SYSLOG="adm"
-export SYS_USER_NGINX="www-data"
-export SYS_GROUP_NGINX="www-data"
-export SYS_USER_CLAMAV="clamav"
-export SYS_GROUP_CLAMAV="clamav"
-
-install -d -m 0755 /var/run/supervisord /var/log/supervisor
-install -d -o ${SYS_USER_SYSLOG} -g ${SYS_GROUP_SYSLOG} -m 0755 /var/log/php-fpm
-install -d -o ${SYS_USER_NGINX}  -g ${SYS_GROUP_NGINX}  -m 0755 /run/php
-install -d -o ${SYS_USER_CLAMAV} -g ${SYS_GROUP_CLAMAV} -m 0755 /run/clamav/
+    if [[ $? == 0 ]]; then
+        break
+    else
+        sleep 1
+    fi
+done
+echo "MySQL service is up."
 
 # Deploy all components.
 time /gosible -e /settings.json -p docker.yml

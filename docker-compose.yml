@@ -15,11 +15,18 @@ version: "3"
 
 services:
   iredmail-mariadb:
-    image: maraidb:11.0-jammy
+    image: mariadb:latest
+    container_name: iredmail-mariadb
     environment:
-      - MARIADB_ROOT_PASSWORD=www
+      - MARIADB_ROOT_PASSWORD=123456
+      - MARIADB_AUTO_UPGRADE=1
     volumes:
       - ./data/mysql:/var/lib/mysql  
+    healthcheck:
+      test: ["CMD", "/usr/bin/mariadb-admin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
     networks:
       iredmail-network:
         aliases:

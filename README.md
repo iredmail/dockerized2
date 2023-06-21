@@ -60,7 +60,7 @@ generated on a web UI in the future):
 version: "3"
 services:
   iredmail-mariadb:
-    image: mariadb:11.0-jammy
+    image: mariadb:latest
     environment:
       - MARIADB_ROOT_PASSWORD=123456
     volumes:
@@ -110,7 +110,7 @@ networks:
 Run:
 
 ```
-docker-compose up
+docker-compose up --wait
 ```
 
 Notes:
@@ -119,7 +119,7 @@ Notes:
   time, please be patient.
 - Do not forget to [setup DNS records](https://docs.iredmail.org/setup.dns.html)
   for your server hostname and email domain names.
-- Docker on Windows and macOS might be buggy, please run it on Linux host instead.
+- Docker on Windows and macOS are buggy, please run it on a Linux host instead.
 
 # Hardware requirements
 
