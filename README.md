@@ -46,7 +46,7 @@ generated on a web UI in the future):
     "use_adminer": true,
     "use_backup": true,
     "homepage_application": "roundcube",
-    "ovecot_enable_last_login": true,
+    "dovecot_enable_last_login": true,
     "dovecot_enable_fts": true,
     "sogo_prefork_processes": 5,
     "fail2ban_store_banned_ip_in_db": true
