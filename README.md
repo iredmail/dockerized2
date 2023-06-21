@@ -110,7 +110,7 @@ networks:
 Run:
 
 ```
-docker-compose up --wait
+docker-compose --project-name iredmail up
 ```
 
 Notes:
