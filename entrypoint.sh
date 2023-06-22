@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Remove leftover pid files which may cause service fail to start."
+find /run -name "*.pid" | xargs rm -f {}
+
 echo "Waiting for MySQL service..."
 while :; do
     /usr/bin/mysqladmin ping -h iredmail-mariadb &>/dev/null
