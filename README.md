@@ -7,11 +7,11 @@ __WARNING__: THIS IS A ALPHA EDITION, DO NOT TRY IT IN PRODUCTION YET.
 
 > In below sample setup:
 >
-> - Server hostname: `mail.a.io`
-> - First email domain name: `a.io`
+> - Server hostname: `mail.a.io` (`inventory_hostname`)
+> - First email domain name: `a.io` (`first_mail_domain`)
 > - Domain admin: `postmaster@a.io`
-> - Domain admin password: `123456`
-> - MySQL root password: `123456`
+> - Domain admin password: `123456` (`first_domain_admin_password`)
+> - MySQL root password: `123456` (`mysql_root_password`)
 
 Create directory `/iredmail` as working directory:
 
@@ -63,6 +63,7 @@ services:
     image: mariadb:latest
     environment:
       - MARIADB_ROOT_PASSWORD=123456
+      - TZ=UTC
     volumes:
       - ./data/mysql:/var/lib/mysql  
     networks:
@@ -76,6 +77,8 @@ services:
     restart: unless-stopped
     depends_on:
       - iredmail-mariadb
+    environment:
+      - TZ=UTC
     volumes:
       - ./settings.json:/settings.json
       - ./data/dot_iredmail:/root/.iredmail
@@ -120,6 +123,9 @@ Notes:
 - Do not forget to [setup DNS records](https://docs.iredmail.org/setup.dns.html)
   for your server hostname and email domain names.
 - Docker on Windows and macOS are buggy, please run it on a Linux host instead.
+- You may want to set a different time zone for your server (by updating `TZ`
+  environment variable), here's
+  [list of time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 # Hardware requirements
 
