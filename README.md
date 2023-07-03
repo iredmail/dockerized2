@@ -92,6 +92,7 @@ services:
       - ./data/clamav:/var/lib/clamav
       - ./data/sa_rules:/var/lib/spamassassin
       - ./data/postfix_queue:/var/spool/postfix
+      - ./data/letsencrypt:/etc/letsencrypt
     ports:
       - 80:80
       - 443:443
