@@ -3,45 +3,14 @@
 
 export DEBIAN_FRONTEND='noninteractive'
 
-export IREDAPD_VERSION='5.3.2'
+export IREDAPD_VERSION='5.3.3'
 export IREDADMIN_VERSION='2.3'
 export MLMMJADMIN_VERSION='3.1.7'
-export ROUNDCUBE_VERSION='1.6.1'
+export ROUNDCUBE_VERSION='1.6.2'
 
-# Required binary packages.
-PKGS_BASE="apt-transport-https bzip2 cron ca-certificates curl dirmngr gzip openssl python3-apt python3-setuptools rsyslog software-properties-common unzip python3-pymysql"
-PKGS_NGINX="nginx"
-PKGS_PHP_FPM="php-fpm php-cli"
-PKGS_POSTFIX="postfix postfix-pcre libsasl2-modules postfix-mysql"
-PKGS_DOVECOT="dovecot-imapd dovecot-pop3d dovecot-lmtpd dovecot-managesieved dovecot-sieve dovecot-mysql dovecot-fts-xapian"
-PKGS_AMAVISD="amavisd-new libcrypt-openssl-rsa-perl libmail-dkim-perl altermime arj nomarch cpio liblz4-tool lzop cabextract p7zip-full rpm libmail-spf-perl unrar-free pax libdbd-mysql-perl"
-PKGS_SPAMASSASSIN="spamassassin"
-PKGS_CLAMAV="clamav-freshclam clamav-daemon"
-PKGS_IREDAPD="python3-sqlalchemy python3-dnspython python3-pymysql python3-more-itertools python3-wheel python3-pip"
-PKGS_IREDADMIN="python3-jinja2 python3-netifaces python3-bcrypt python3-dnspython python3-simplejson python3-more-itertools"
-PKGS_MLMMJ="mlmmj altermime"
-PKGS_MLMMJADMIN="uwsgi uwsgi-plugin-python3 python3-requests python3-pymysql python3-more-itertools"
-PKGS_FAIL2BAN="fail2ban bind9-dnsutils iptables"
-PKGS_ROUNDCUBE="php-bz2 php-curl php-gd php-imap php-intl php-json php-mbstring php-mysql php-pspell php-xml php-zip mcrypt mariadb-client aspell"
-PKGS_BIND="bind9 bind9utils dnsutils"
-PKGS_SOGO="memcached sogo sogo-activesync sogo-common libsope-appserver4.9 libsope-core4.9 libsope-gdl1-4.9 libsope-ldap4.9 libsope-mime4.9 libsope-xml4.9 sope4.9-libxmlsaxdriver"
-PKGS_ALL="wget gpg-agent supervisor mailutils less vim-tiny tzdata certbot
-    ${PKGS_BASE}
-    ${PKGS_NGINX}
-    ${PKGS_PHP_FPM}
-    ${PKGS_POSTFIX}
-    ${PKGS_DOVECOT}
-    ${PKGS_AMAVISD}
-    ${PKGS_SPAMASSASSIN}
-    ${PKGS_CLAMAV}
-    ${PKGS_IREDAPD}
-    ${PKGS_IREDADMIN}
-    ${PKGS_MLMMJ}
-    ${PKGS_MLMMJADMIN}
-    ${PKGS_FAIL2BAN}
-    ${PKGS_ROUNDCUBE}
-    ${PKGS_BIND}
-    ${PKGS_SOGO}"
+export PKGS_MARIADB="altermime amavisd-new apt-transport-https arj aspell bind9-dnsutils bzip2 ca-certificates cabextract clamav-daemon clamav-freshclam cpio cron curl dbus dirmngr dovecot-fts-xapian dovecot-imapd dovecot-lmtpd dovecot-managesieved dovecot-mysql dovecot-pop3d dovecot-sieve fail2ban gpg-agent gzip iptables less libcrypt-openssl-rsa-perl libdbd-mysql-perl liblz4-tool libmail-dkim-perl libmail-spf-perl libsasl2-modules lzop mailutils mariadb-client mariadb-server mcrypt mlmmj nginx nomarch openssl p7zip-full pax php-bz2 php-cli php-curl php-fpm php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip postfix postfix-mysql postfix-pcre python3-apt python3-bcrypt python3-dnspython python3-jinja2 python3-ldap python3-more-itertools python3-netifaces python3-psycopg2 python3-pymysql python3-requests python3-setuptools python3-simplejson python3-sqlalchemy rpm rsyslog software-properties-common spamassassin supervisor unrar-free unzip uwsgi uwsgi-plugin-python3 wget"
+export PKGS_PGSQL="altermime amavisd-new apt-transport-https arj aspell bind9-dnsutils bzip2 ca-certificates cabextract clamav-daemon clamav-freshclam cpio cron curl dbus dirmngr dovecot-fts-xapian dovecot-imapd dovecot-lmtpd dovecot-managesieved dovecot-pgsql dovecot-pop3d dovecot-sieve fail2ban gpg-agent gzip iptables less libcrypt-openssl-rsa-perl libdbd-mysql-perl liblz4-tool libmail-dkim-perl libmail-spf-perl libsasl2-modules lzop mailutils mariadb-client mariadb-server mcrypt mlmmj nginx nomarch openssl p7zip-full pax php-bz2 php-cli php-curl php-fpm php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip postfix postfix-pcre postfix-pgsql python3-apt python3-bcrypt python3-dnspython python3-jinja2 python3-ldap python3-more-itertools python3-netifaces python3-psycopg2 python3-pymysql python3-requests python3-setuptools python3-simplejson python3-sqlalchemy rpm rsyslog software-properties-common spamassassin supervisor unrar-free unzip uwsgi uwsgi-plugin-python3 wget postgresql-client"
+PKGS_OPENLDAP="altermime amavisd-new apt-transport-https arj aspell bind9-dnsutils bzip2 ca-certificates cabextract clamav-daemon clamav-freshclam cpio cron curl dbus dirmngr dovecot-fts-xapian dovecot-imapd dovecot-ldap dovecot-lmtpd dovecot-managesieved dovecot-mysql dovecot-pop3d dovecot-sieve fail2ban gpg-agent gzip iptables less libcrypt-openssl-rsa-perl libdbd-mysql-perl liblz4-tool libmail-dkim-perl libmail-spf-perl libsasl2-modules lzop mailutils mariadb-client mariadb-server mcrypt mlmmj nginx nomarch openssl p7zip-full pax php-bz2 php-cli php-curl php-fpm php-gd php-imap php-intl php-json php-ldap php-mbstring php-mysql php-pgsql php-pspell php-xml php-zip postfix postfix-ldap postfix-mysql postfix-pcre python3-apt python3-bcrypt python3-dnspython python3-jinja2 python3-ldap python3-more-itertools python3-netifaces python3-psycopg2 python3-pymysql python3-requests python3-setuptools python3-simplejson python3-sqlalchemy rpm rsyslog software-properties-common spamassassin supervisor unrar-free unzip uwsgi uwsgi-plugin-python3 wget"
 
 # Required directories.
 export WEB_APP_ROOTDIR="/opt/www"
@@ -61,8 +30,11 @@ wget -q \
     mv /tmp/sogo-nightly.gpg /etc/apt/trusted.gpg.d/
     rm -f /tmp/sogo-nightly
 
-echo "Install packages: ${PKGS_ALL}"
-apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends ${PKGS_ALL}
+echo "Install all packages."
+apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends ${PKGS_MARIADB} ${PKGS_PGSQL} ${PKGS_OPENLDAP}
+
 apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 
 # Create required directories.

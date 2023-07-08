@@ -1,48 +1,50 @@
 version: "3"
 #volumes:
 #  iredmail_dot_iredmail:
-#  iredmail_backup_mysql:
+#  iredmail_backup_pgsql:
 #  iredmail_mailboxes:
 #  iredmail_mlmmj:
 #  iredmail_mlmmj_archive:
 #  iredmail_imapsieve_copy:
 #  iredmail_custom:
 #  iredmail_ssl:
-#  iredmail_mysql:
+#  iredmail_pgsql:
 #  iredmail_clamav:
 #  iredmail_sa_rules:
 #  iredmail_postfix_queue:
 
 services:
-  iredmail-mariadb:
-    image: mariadb:latest
-    container_name: iredmail-mariadb
+  iredmail-pgsql:
+    image: postgres:15.3-alpine
+    container_name: iredmail-pgsql
     environment:
-      - MARIADB_ROOT_PASSWORD=123456
-      - MARIADB_AUTO_UPGRADE=1
+      - POSTGRES_PASSWORD=123456
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ./data/mysql:/var/lib/mysql  
+      - ./data/pgsql:/var/lib/postgresql/data
+    #ports:
+    #  - "5432:5432"
     healthcheck:
-      test: ["CMD", "/usr/bin/mariadb-admin" ,"ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 5
     networks:
       iredmail-network:
         aliases:
-          - iredmail-mariadb
+          - iredmail-pgsql
 
   iredmail:
     image: iredmail/test-mariadb:nightly
     container_name: iredmail
     restart: unless-stopped
     depends_on:
-      iredmail-mariadb:
+      iredmail-pgsql:
         condition: service_healthy
     volumes:
       - ./gosible/settings.json:/settings.json
       - ./data/dot_iredmail:/root/.iredmail
-      - ./data/backup_mysql:/var/vmail/backup/mysql
+      - ./data/backup_pgsql:/var/vmail/backup/pgsql
       - ./data/mailboxes:/var/vmail/vmail1
       - ./data/mlmmj:/var/vmail/mlmmj
       - ./data/mlmmj_archive:/var/vmail/mlmmj-archive
@@ -54,14 +56,13 @@ services:
       - ./data/postfix_queue:/var/spool/postfix
       #- ./gosible/settings.json:/settings.json
       #- iredmail_dot_iredmail:/root/.iredmail
-      #- iredmail_backup_mysql:/var/vmail/backup/mysql
+      #- iredmail_backup_pgsql:/var/vmail/backup/pgsql
       #- iredmail_mailboxes:/var/vmail/vmail1
       #- iredmail_mlmmj:/var/vmail/mlmmj
       #- iredmail_mlmmj_archive:/var/vmail/mlmmj-archive
       #- iredmail_imapsieve_copy:/var/vmail/imapsieve_copy
       #- iredmail_custom:/opt/iredmail/custom
       #- iredmail_ssl:/opt/iredmail/ssl
-      #- iredmail_mysql:/var/lib/mysql
       #- iredmail_clamav:/var/lib/clamav
       #- iredmail_sa_rules:/var/lib/spamassassin
       #- iredmail_postfix_queue:/var/spool/postfix

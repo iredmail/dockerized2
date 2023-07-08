@@ -1,0 +1,3 @@
+- pgsql 版：
+    - 改进 entrypoing.sh，等待 pgsql 服务起来
+    - 测试容器运行情况

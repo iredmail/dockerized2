@@ -1,5 +1,7 @@
 {
-    "iredmail_backend": "mariadb",
+    "//iredmail_backend": "mariadb",
+    "//iredmail_backend": "openldap",
+    "iredmail_backend": "pgsql",
     "storage_base_dir": "/var/vmail",
     "first_mail_domain": "a.io",
     "first_domain_admin_password": "123456",
