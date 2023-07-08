@@ -36,7 +36,7 @@ if [[ "${_has_sig}" == 'NO' ]]; then
 fi
 
 # Deploy all components.
-time /gosible -e /settings.json -p docker.yml
+time /gosible -e /settings.json -p docker.yml -d
 
 install -d -o www-data -g www-data -m 0755 /run/php
 
