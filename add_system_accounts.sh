@@ -1,5 +1,12 @@
 #!/bin/sh
 
+groupadd --gid 115 postgres
+useradd \
+    --uid 115 \
+    --gid postgres \
+    --shell /sbin/nologin \
+    postgres
+
 groupadd --gid 2000 vmail
 useradd \
     --uid 2000 \
