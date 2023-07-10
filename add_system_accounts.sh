@@ -5,6 +5,7 @@ useradd \
     --uid 115 \
     --gid postgres \
     --shell /sbin/nologin \
+    --home-dir /var/lib/postgresql \
     postgres
 
 groupadd --gid 2000 vmail
@@ -47,4 +48,4 @@ useradd \
     --uid 2004 \
     --gid netdata \
     --shell /sbin/nologin \
-    netdata    
+    netdata
