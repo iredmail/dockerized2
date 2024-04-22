@@ -41,21 +41,21 @@ apt-get clean && apt-get autoclean && rm -rf /var/lib/apt/lists/*
 mkdir -p ${WEB_APP_ROOTDIR}
 
 # Install iRedAPD.
-wget -c -q https://github.com/iredmail/iRedAPD/archive/${IREDAPD_VERSION}.tar.gz && \
-    tar xzf ${IREDAPD_VERSION}.tar.gz -C /opt && \
-    rm -f ${IREDAPD_VERSION}.tar.gz && \
-    ln -s /opt/iRedAPD-${IREDAPD_VERSION} /opt/iredapd && \
-    chown -R iredapd:iredapd /opt/iRedAPD-${IREDAPD_VERSION} && \
-    chmod -R 0500 /opt/iRedAPD-${IREDAPD_VERSION} && \
+#wget -c -q https://github.com/iredmail/iRedAPD/archive/${IREDAPD_VERSION}.tar.gz && \
+#    tar xzf ${IREDAPD_VERSION}.tar.gz -C /opt && \
+#    rm -f ${IREDAPD_VERSION}.tar.gz && \
+#    ln -s /opt/iRedAPD-${IREDAPD_VERSION} /opt/iredapd && \
+#    chown -R iredapd:iredapd /opt/iRedAPD-${IREDAPD_VERSION} && \
+#    chmod -R 0500 /opt/iRedAPD-${IREDAPD_VERSION} && \
 
 # Install mlmmjadmin.
-wget -c -q https://github.com/iredmail/mlmmjadmin/archive/${MLMMJADMIN_VERSION}.tar.gz && \
-    tar zxf ${MLMMJADMIN_VERSION}.tar.gz -C /opt && \
-    rm -f ${MLMMJADMIN_VERSION}.tar.gz && \
-    ln -s /opt/mlmmjadmin-${MLMMJADMIN_VERSION} /opt/mlmmjadmin && \
-    cd /opt/mlmmjadmin-${MLMMJADMIN_VERSION} && \
-    chown -R mlmmj:mlmmj /opt/mlmmjadmin-${MLMMJADMIN_VERSION} && \
-    chmod -R 0500 /opt/mlmmjadmin-${MLMMJADMIN_VERSION}
+#wget -c -q https://github.com/iredmail/mlmmjadmin/archive/${MLMMJADMIN_VERSION}.tar.gz && \
+#    tar zxf ${MLMMJADMIN_VERSION}.tar.gz -C /opt && \
+#    rm -f ${MLMMJADMIN_VERSION}.tar.gz && \
+#    ln -s /opt/mlmmjadmin-${MLMMJADMIN_VERSION} /opt/mlmmjadmin && \
+#    cd /opt/mlmmjadmin-${MLMMJADMIN_VERSION} && \
+#    chown -R mlmmj:mlmmj /opt/mlmmjadmin-${MLMMJADMIN_VERSION} && \
+#    chmod -R 0500 /opt/mlmmjadmin-${MLMMJADMIN_VERSION}
 
 # Install Roundcube.
 wget -c -q https://github.com/roundcube/roundcubemail/releases/download/${ROUNDCUBE_VERSION}/roundcubemail-${ROUNDCUBE_VERSION}-complete.tar.gz && \
@@ -68,10 +68,10 @@ wget -c -q https://github.com/roundcube/roundcubemail/releases/download/${ROUNDC
     chown -R www-data:www-data temp logs && \
     chmod 0000 CHANGELOG.md INSTALL LICENSE README* UPGRADING installer SQL
 
- # Install iRedAdmin (open source edition).
-wget -c -q https://github.com/iredmail/iRedAdmin/archive/${IREDADMIN_VERSION}.tar.gz && \
-    tar xzf ${IREDADMIN_VERSION}.tar.gz -C /opt/www && \
-    rm -f ${IREDADMIN_VERSION}.tar.gz && \
-    ln -s /opt/www/iRedAdmin-${IREDADMIN_VERSION} /opt/www/iredadmin && \
-    chown -R iredadmin:iredadmin /opt/www/iRedAdmin-${IREDADMIN_VERSION} && \
-    chmod -R 0555 /opt/www/iRedAdmin-${IREDADMIN_VERSION}
+# Install iRedAdmin (open source edition).
+#wget -c -q https://github.com/iredmail/iRedAdmin/archive/${IREDADMIN_VERSION}.tar.gz && \
+#    tar xzf ${IREDADMIN_VERSION}.tar.gz -C /opt/www && \
+#    rm -f ${IREDADMIN_VERSION}.tar.gz && \
+#    ln -s /opt/www/iRedAdmin-${IREDADMIN_VERSION} /opt/www/iredadmin && \
+#    chown -R iredadmin:iredadmin /opt/www/iRedAdmin-${IREDADMIN_VERSION} && \
+#    chmod -R 0555 /opt/www/iRedAdmin-${IREDADMIN_VERSION}
