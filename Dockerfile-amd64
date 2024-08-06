@@ -1,6 +1,6 @@
 # Dockerized iRedMail.
 # Run all mail server applications in one container - except MariaDB.
-FROM ubuntu:jammy
+FROM ubuntu:noble
 LABEL maintainer Zhang Huangbin <zhb@iredmail.org>
 EXPOSE 80 443 25 465 587 143 993 110 995 4190
 

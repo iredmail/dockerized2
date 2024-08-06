@@ -1,6 +1,6 @@
 __WARNING__: THIS IS A ALPHA EDITION, DO NOT TRY IT IN PRODUCTION YET.
 
-- Base image is Ubuntu 22.04 (jammy).
+- Base image is Ubuntu 24.04 (noble).
 - Dockerized iRedMail follows the [Best Practice of iRedMail Easy platform](https://docs.iredmail.org/iredmail-easy.best.practice.html).
 
 # Getting Started

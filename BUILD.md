@@ -6,7 +6,7 @@
 - 新建一个 `settings.json` 文件
     - 定义变量 `iredmail_backend` 设置 backend
     - 定义变量 `use_XXX` 启用各个组件
-- 运行一个 Ubuntu 22.04 系统，将 `gosible` 和 `settings.json` 复制进去，运行
+- 运行一个 Ubuntu 24.04 系统，将 `gosible` 和 `settings.json` 复制进去，运行
   以下命令得到指定的 backend 需要安装的软件包列表：
 
 ```
